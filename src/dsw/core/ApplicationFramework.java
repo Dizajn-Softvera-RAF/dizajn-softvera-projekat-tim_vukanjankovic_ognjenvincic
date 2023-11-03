@@ -1,15 +1,28 @@
 package dsw.core;
 
+import dsw.core.logger.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ApplicationFramework {
-    protected dsw.core.SwingGui gui;
+    protected dsw.core.Gui gui;
+    protected dsw.core.ClassyRepository classyRepository;
+    protected MessageGeneratorImpl messageGenerator;
+    protected Logger consoleLogger, fileLogger;
 
-    public void run(SwingGui gui)
-    {this.gui.start();}
 
-    public void initialise(SwingGui gui){
+    public void run(Gui gui) {
+        this.gui.start();
+    }
 
+    public void initialise(Gui gui, ClassyRepository classyRepository, MessageGeneratorImpl mg, ConsoleLogger cl, FileLogger fl){
         this.gui = gui;
-
+        this.classyRepository = classyRepository;
+        this.messageGenerator = mg;
+        this.consoleLogger = cl;
+        this.fileLogger = fl;
     }
     private static ApplicationFramework instance;
 

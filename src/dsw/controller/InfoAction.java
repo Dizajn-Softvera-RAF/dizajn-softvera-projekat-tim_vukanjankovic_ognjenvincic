@@ -1,5 +1,6 @@
 package dsw.controller;
 
+import dsw.controller.AbstractClassyAction;
 import dsw.view.MainFrame;
 import dsw.view.modals.InfoModal;
 import dsw.view.modals.Modal;
@@ -8,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class InfoAction extends AbstractClassyAction{
+public class InfoAction extends AbstractClassyAction {
     public InfoAction() {
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.CTRL_MASK));
         putValue(SMALL_ICON, loadIcon("/images/info.png"));
