@@ -6,6 +6,9 @@ import dsw.core.ApplicationFramework;
 import dsw.core.logger.MessageType;
 import dsw.observer.IPublisher;
 import dsw.observer.ISubscriber;
+import dsw.repository.implementation.Diagram;
+import dsw.repository.implementation.Package;
+import dsw.repository.implementation.Project;
 import dsw.view.MainFrame;
 
 import javax.swing.*;
@@ -53,7 +56,23 @@ public class NewProjectAction extends AbstractClassyAction implements PopupActio
             ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
             return;
         }
+        else if(MainFrame.getInstance().getClassyTree().getSelectedNode().getClassyNode() instanceof Project)
+        {
+            ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.CANT_ADD);
+            return;
+        }
+
+        else if(MainFrame.getInstance().getClassyTree().getSelectedNode().getClassyNode() instanceof Package)
+        {
+            ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.CANT_ADD);
+            return;
+        }
+
+        else if(MainFrame.getInstance().getClassyTree().getSelectedNode().getClassyNode() instanceof Diagram)
+        {
+            ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.CANT_ADD);
+            return;
+        }
         MainFrame.getInstance().getClassyTree().addChild(selected);
-        System.out.println("radi");
     }
 }

@@ -1,6 +1,7 @@
 package dsw.view;
 
 import dsw.observer.ISubscriber;
+import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import dsw.view.components.TabbedPane;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class ProjectView extends JPanel implements ISubscriber {
 
     private JLabel imeProjekta, autor;
     private Project project;
+    private Package pckg;
     private TabbedPane tabbedPane;
 
 
@@ -57,10 +59,18 @@ public class ProjectView extends JPanel implements ISubscriber {
             autor.setText("");
             return;
         }
-        Project p = (Project) notification;
-        project = p;
-        tabbedPane.setTabs(p.getChildren());
-        imeProjekta.setText(p.getName());
-        autor.setText(p.getAutor());
+        if(notification instanceof Project) {
+            Project p = (Project) notification;
+            project = p;
+            tabbedPane.setTabs(p.getChildren());
+            imeProjekta.setText(p.getName());
+            autor.setText(p.getAutor());
+        }
+
+        else if(notification instanceof Package) {
+            Package p = (Package) notification;
+            pckg = p;
+            tabbedPane.setTabs(p.getChildren());
+        }
     }
 }

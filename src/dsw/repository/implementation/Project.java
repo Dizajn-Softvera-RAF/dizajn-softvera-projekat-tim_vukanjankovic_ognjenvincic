@@ -45,13 +45,35 @@ public class Project extends ClassyNodeComposite implements IPublisher {
     }
 
     @Override
-    public void addChild(ClassyNode child) {
+    public void addChild(ClassyNode node) {
+        if(node != null && node instanceof Package)
+        {
+            Package pack = (Package) node;
 
+            if(!this.getChildren().contains(pack))
+                this.getChildren().add(pack);
+
+        }
+        else if(node != null && node instanceof Diagram)
+        {
+            Diagram diagram = (Diagram) node;
+
+            if(!this.getChildren().contains(diagram)) {
+                this.getChildren().add(diagram);
+            }
+        }
     }
 
     @Override
-    public void addChild(ClassyNodeComposite child) {
+    public void addChild(ClassyNodeComposite node) {
+        if(node != null && node instanceof Package)
+        {
+            Package pack = (Package) node;
 
+            if(!this.getChildren().contains(pack))
+                this.getChildren().add(pack);
+
+        }
     }
 
     @Override
@@ -65,6 +87,14 @@ public class Project extends ClassyNodeComposite implements IPublisher {
             Diagram diagram = (Diagram) child;
             if(this.getChildren().contains(diagram)){
                 this.getChildren().remove(diagram);
+                notifySubscribers(this);
+            }
+        }
+
+        if(child instanceof Package){
+            Package pcg = (Package) child;
+            if(this.getChildren().contains(pcg)){
+                this.getChildren().remove(pcg);
                 notifySubscribers(this);
             }
         }

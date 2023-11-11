@@ -4,6 +4,7 @@ import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.observer.IPublisher;
 import dsw.observer.ISubscriber;
 import dsw.repository.implementation.Diagram;
+import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import dsw.view.MainFrame;
 
@@ -25,10 +26,12 @@ public class ClassyTreeSelectionListener implements TreeSelectionListener, IPubl
         if (treeItemSelected.getClassyNode() instanceof Project) {
             notifySubscribers(treeItemSelected.getClassyNode());
         }
-        if (treeItemSelected.getClassyNode() instanceof Diagram) {
+        else if (treeItemSelected.getClassyNode() instanceof Diagram) {
             notifySubscribers(treeItemSelected.getClassyNode().getParent());
         }
-
+        else if (treeItemSelected.getClassyNode() instanceof Package) {
+            notifySubscribers(treeItemSelected.getClassyNode().getParent());
+        }
 
     }
 

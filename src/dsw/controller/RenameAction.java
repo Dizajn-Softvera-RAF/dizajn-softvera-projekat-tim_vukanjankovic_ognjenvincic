@@ -5,6 +5,7 @@ import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.core.ApplicationFramework;
 import dsw.core.logger.MessageType;
 import dsw.repository.implementation.Diagram;
+import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import dsw.repository.implementation.ProjectExplorer;
 import dsw.view.MainFrame;
@@ -37,6 +38,12 @@ public class RenameAction  extends AbstractClassyAction implements PopupAction {
                 return;
         }
         if (selected.getClassyNode() instanceof Project) {
+            if (!MainFrame.getInstance().getClassyTree().projectExists(selected)) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.PROJECT_DOESNT_EXIST);
+                return;
+            }
+        }
+        if (selected.getClassyNode() instanceof Package) {
             if (!MainFrame.getInstance().getClassyTree().projectExists(selected)) {
                 ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.PROJECT_DOESNT_EXIST);
                 return;

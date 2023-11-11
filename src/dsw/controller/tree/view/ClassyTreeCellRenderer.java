@@ -2,6 +2,7 @@ package dsw.controller.tree.view;
 
 import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.repository.implementation.Diagram;
+import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import dsw.repository.implementation.ProjectExplorer;
 
@@ -25,7 +26,11 @@ public class ClassyTreeCellRenderer extends DefaultTreeCellRenderer {
             imageURL = getClass().getResource("/images/tproject.png");
         }
         else if (((ClassyTreeItem)value).getClassyNode() instanceof Diagram) {
-            imageURL = getClass().getResource("/images/tmap.png");
+            imageURL = getClass().getResource("/images/diagram.png");
+        }
+
+        else if (((ClassyTreeItem)value).getClassyNode() instanceof Package) {
+            imageURL = getClass().getResource("/images/package.png");
         }
 
         Icon icon = null;

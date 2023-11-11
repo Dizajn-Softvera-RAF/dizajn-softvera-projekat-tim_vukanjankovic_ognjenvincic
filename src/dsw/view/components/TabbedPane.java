@@ -31,8 +31,10 @@ public class TabbedPane extends JTabbedPane {
         public void setTabs(List<ClassyNode> nodes) {
             removeAll();
             for (ClassyNode node : nodes) {
-                DiagramView view = new DiagramView((Diagram) node);
-                addTab(node.getName(), view);
+                if(node instanceof Diagram) {
+                    DiagramView view = new DiagramView((Diagram) node);
+                    addTab(node.getName(), view);
+                }
             }
 
             ClassyTreeItem selected = MainFrame.getInstance().getClassyTree().getSelectedNode();

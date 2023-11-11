@@ -15,7 +15,10 @@ public class DiagramModel implements IPublisher {
     ArrayList<ISubscriber> subscribers;
     private String name;
 
-
+    public DiagramModel()
+    {
+        subscribers = new ArrayList<>();
+    }
 
     @Override
     public void addSubscriber(ISubscriber sub) {

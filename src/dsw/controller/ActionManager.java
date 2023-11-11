@@ -1,5 +1,6 @@
 package dsw.controller;
 
+import dsw.repository.implementation.Package;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ public class ActionManager {
     private NewProjectAction newProjectAction;
     private NewDiagramAction newDiagramAction;
     private RenameAction renameAction;
+    private NewPackageAction newPackageAction;
 
 
     public ActionManager(){initialiseActions();}
@@ -24,6 +26,7 @@ public class ActionManager {
         newProjectAction = new NewProjectAction();
         newDiagramAction = new NewDiagramAction();
         renameAction = new RenameAction();
+        newPackageAction = new NewPackageAction();
     }
 
 }
