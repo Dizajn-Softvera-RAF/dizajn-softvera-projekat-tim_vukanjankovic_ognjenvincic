@@ -27,10 +27,15 @@ public class ClassyTreeSelectionListener implements TreeSelectionListener, IPubl
             notifySubscribers(treeItemSelected.getClassyNode());
         }
         else if (treeItemSelected.getClassyNode() instanceof Diagram) {
-            notifySubscribers(treeItemSelected.getClassyNode().getParent());
+            while(!(treeItemSelected.getClassyNode() instanceof Project || treeItemSelected.getClassyNode() instanceof Package))
+                treeItemSelected = treeItemSelected.getClassyNode().getParent().getClassyTreeItem();
+            if(treeItemSelected.getClassyNode() instanceof Package)
+                notifySubscribers(treeItemSelected.getClassyNode().getParent());
+            notifySubscribers(treeItemSelected.getClassyNode());
         }
         else if (treeItemSelected.getClassyNode() instanceof Package) {
             notifySubscribers(treeItemSelected.getClassyNode().getParent());
+            notifySubscribers(treeItemSelected.getClassyNode());
         }
 
     }

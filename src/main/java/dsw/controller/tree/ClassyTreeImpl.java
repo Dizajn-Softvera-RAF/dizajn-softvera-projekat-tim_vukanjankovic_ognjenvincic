@@ -176,11 +176,11 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
     public boolean packageExists(ClassyTreeItem node) {
         if (node == null) return false;
         if (node.getClassyNode() instanceof Package) {
-            ProjectExplorer pe = (ProjectExplorer) node.getClassyNode().getParent();
+            Project pe = (Project) node.getClassyNode().getParent();
             return pe.getChildren().contains(node.getClassyNode());
         }
         if (node.getClassyNode() instanceof Diagram) {
-            ProjectExplorer pe = (ProjectExplorer) node.getClassyNode().getParent().getParent();
+            Project pe = (Project) node.getClassyNode().getParent().getParent();
             return pe.getChildren().contains(node.getClassyNode().getParent());
         }
 

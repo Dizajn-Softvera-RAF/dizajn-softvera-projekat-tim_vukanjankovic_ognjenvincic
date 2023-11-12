@@ -45,8 +45,8 @@ public class AutorAction extends AbstractClassyAction implements PopupAction {
             ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
             return;
         }
-        if (selected.getClassyNode() instanceof Package) selected = (ClassyTreeItem) selected.getParent();
-        if (selected.getClassyNode() instanceof Diagram) selected = (ClassyTreeItem) selected.getParent();
+        while (selected.getClassyNode() instanceof Package || selected.getClassyNode() instanceof Diagram)
+            selected = (ClassyTreeItem) selected.getParent();
 
         if (!MainFrame.getInstance().getClassyTree().projectExists(selected)) {
             ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.PROJECT_DOESNT_EXIST);

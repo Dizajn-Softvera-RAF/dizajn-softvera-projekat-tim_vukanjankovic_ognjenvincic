@@ -44,7 +44,8 @@ public class RenameAction  extends AbstractClassyAction implements PopupAction {
             }
         }
         if (selected.getClassyNode() instanceof Package) {
-            if (!MainFrame.getInstance().getClassyTree().projectExists(selected) || !MainFrame.getInstance().getClassyTree().packageExists(selected)) {
+            if (!MainFrame.getInstance().getClassyTree().projectExists((ClassyTreeItem) selected.getParent()) || !MainFrame.getInstance().getClassyTree().packageExists(selected)) {
+                System.out.println(MainFrame.getInstance().getClassyTree().projectExists((ClassyTreeItem) selected.getParent()));
                 return;
             }
         }
