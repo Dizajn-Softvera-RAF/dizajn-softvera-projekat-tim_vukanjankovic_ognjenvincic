@@ -3,8 +3,10 @@ package dsw.view;
 
 import dsw.controller.ActionManager;
 import dsw.controller.tree.ClassyTreeImpl;
+import dsw.model.helpers.CustomCursor;
 import dsw.observer.ISubscriber;
 import dsw.view.components.MyMenuBar;
+import dsw.view.components.Palette;
 import dsw.view.components.TabbedPane;
 import dsw.view.components.ToolBar;
 import dsw.core.ApplicationFramework;
@@ -27,6 +29,10 @@ public class MainFrame extends JFrame implements ISubscriber {
     private ProjectView projectView;
     private NodeGenerator nodeGenerator;
     private JScrollPane scroll;
+    private Palette pallete;
+    private CustomCursor cursors;
+
+
 
 
 
@@ -38,6 +44,7 @@ public class MainFrame extends JFrame implements ISubscriber {
         classyTree = new ClassyTreeImpl();
         projectView = new ProjectView();
         nodeGenerator = new NodeGenerator();
+        cursors = new CustomCursor();
         initialiseGUI();
     }
 
@@ -58,17 +65,20 @@ public class MainFrame extends JFrame implements ISubscriber {
 
         scroll=new JScrollPane(projectExplorer);
         scroll.setMinimumSize(new Dimension(200,150));
+        pallete = new Palette();
         JPanel prView = new JPanel();
         prView.setLayout(new BoxLayout (prView, BoxLayout.X_AXIS));
         prView.add(projectView);
         JPanel tool = new JPanel();
         tool.setLayout(new FlowLayout(FlowLayout.LEADING));
+        tool.add(pallete);
         prView.add(tool);
         JSplitPane split=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scroll,prView);
         getContentPane().add(split,BorderLayout.CENTER);
         split.setDividerLocation(250);
         split.setOneTouchExpandable(true);
 
+        int width = (int) Math.floor(projectView.getPreferredSize().getWidth());
     }
 
 

@@ -15,6 +15,7 @@ public class ActionManager {
     private RenameAction renameAction;
     private NewPackageAction newPackageAction;
     private AutorAction autorAction;
+    private NewConnectionAction connectionAction;
 
 
     public ActionManager(){initialiseActions();}
@@ -28,6 +29,7 @@ public class ActionManager {
         renameAction = new RenameAction();
         newPackageAction = new NewPackageAction();
         autorAction = new AutorAction();
+        connectionAction = new NewConnectionAction();
     }
 
 }

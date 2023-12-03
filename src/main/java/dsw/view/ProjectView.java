@@ -1,6 +1,7 @@
 package dsw.view;
 
 import dsw.observer.ISubscriber;
+import dsw.state.StateManager;
 import dsw.view.components.TabbedPane;
 import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
@@ -18,6 +19,7 @@ public class ProjectView extends JPanel implements ISubscriber {
     private JLabel imeProjekta, autor;
     private Project project;
     private Package pckg;
+    private StateManager stateManager;
     private TabbedPane tabbedPane;
 
 
@@ -42,6 +44,9 @@ public class ProjectView extends JPanel implements ISubscriber {
         info.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
 
         tabbedPane = new TabbedPane();
+        tabbedPane.addChangeListener(e ->
+                MainFrame.getInstance().getPallete().setSelectedButton(getStateManager().getCurrentState())
+        );
 
         add(info);
         JPanel down = new JPanel();
@@ -72,5 +77,14 @@ public class ProjectView extends JPanel implements ISubscriber {
             pckg = p;
             tabbedPane.setTabs(p.getChildren());
         }
+    }
+
+    public void startConnectionState(){
+        stateManager.setConnectionState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startDiagramState(){
+        stateManager.setDiagramState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
     }
 }
