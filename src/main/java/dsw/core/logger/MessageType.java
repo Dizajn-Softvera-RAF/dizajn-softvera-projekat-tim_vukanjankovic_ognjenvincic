@@ -1,0 +1,19 @@
+package dsw.core.logger;
+
+public enum MessageType {
+
+    NODE_NOT_SELECTED,
+    EMPTY_FIELD,
+    CANT_DELETE,
+
+    PROJECT_DOESNT_EXIST,
+
+    CANT_ADD,
+
+    CANT_ADD_DIAGRAM_IN_PROJECTEXPLORER,
+
+    CANT_ADD_PACKAGE_IN_PROJECTEXPLORER,
+
+    MAIN_ALREADY_EXISTS
+
+}
