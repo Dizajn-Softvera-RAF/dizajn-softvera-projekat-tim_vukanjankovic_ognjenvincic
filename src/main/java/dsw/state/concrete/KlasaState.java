@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class DiagramState extends AbstractState implements State {
-
+public class KlasaState extends AbstractState implements State {
     private int retries = 0;
 
 

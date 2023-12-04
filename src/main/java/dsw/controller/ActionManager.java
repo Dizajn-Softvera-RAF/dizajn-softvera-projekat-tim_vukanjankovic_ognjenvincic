@@ -15,8 +15,14 @@ public class ActionManager {
     private RenameAction renameAction;
     private NewPackageAction newPackageAction;
     private AutorAction autorAction;
-    private NewConnectionAction connectionAction;
-    private NewElementAction elementAction;
+    private NewAgregacijaAction agregacijaAction;
+    private NewKompozicijaAction kompozicijaAction;
+    private NewZavisnostAction zavisnostAction;
+    private NewGeneralizacijaAction generalizacijaAction;
+    private NewKlasaAction klasaAction;
+    private NewInterfejsAction interfejsAction;
+    private NewEnumAction enumAction;
+
 
     public ActionManager(){initialiseActions();}
 
@@ -29,8 +35,13 @@ public class ActionManager {
         renameAction = new RenameAction();
         newPackageAction = new NewPackageAction();
         autorAction = new AutorAction();
-        connectionAction = new NewConnectionAction();
-        elementAction = new NewElementAction();
+        agregacijaAction = new NewAgregacijaAction();
+        kompozicijaAction = new NewKompozicijaAction();
+        zavisnostAction = new NewZavisnostAction();
+        generalizacijaAction = new NewGeneralizacijaAction();
+        klasaAction = new NewKlasaAction();
+        interfejsAction = new NewInterfejsAction();
+        enumAction = new NewEnumAction();
     }
 
 }

@@ -1,8 +1,7 @@
 package dsw.state;
 
 import dsw.model.DiagramModel;
-import dsw.state.concrete.ConnectionState;
-import dsw.state.concrete.DiagramState;
+import dsw.state.concrete.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,24 +12,50 @@ import java.awt.geom.Line2D;
 public class StateManager {
 
     private State currentState;
-    private DiagramState diagramState;
-    private ConnectionState connectionState;
+    private KlasaState klasaState;
+    private InterfejsState interfejsState;
+    private EnumState enumState;
+    private AgregacijaState agregacijaState;
+    private KompozicijaState kompozicijaState;
+    private ZavisnostState zavisnostState;
+    private GeneralizacijaState generalizacijaState;
 
     public StateManager() {
         initStates();
     }
 
     private void initStates() {
-        diagramState = new DiagramState();
-        connectionState = new ConnectionState();
+        agregacijaState = new AgregacijaState();
+        kompozicijaState = new KompozicijaState();
+        zavisnostState = new ZavisnostState();
+        generalizacijaState = new GeneralizacijaState();
+        klasaState = new KlasaState();
+        interfejsState = new InterfejsState();
+        enumState = new EnumState();
 
-        currentState = diagramState;
+        currentState = klasaState;
     }
 
-    public void setConnectionState(){
-        currentState = connectionState;
+    public void setAgregacijaState(){
+        currentState = agregacijaState;
     }
-    public void setDiagramState(){
-        currentState = diagramState;
+    public void setKompozicijaState(){
+        currentState = kompozicijaState;
+    }
+    public void setZavisnostState(){
+        currentState = zavisnostState;
+    }
+    public void setGeneralizacijaState(){
+        currentState = generalizacijaState;
+    }
+
+    public void setKlasaState(){
+        currentState = klasaState;
+    }
+    public void setInterfejsState(){
+        currentState = interfejsState;
+    }
+    public void setEnumState(){
+        currentState = enumState;
     }
 }

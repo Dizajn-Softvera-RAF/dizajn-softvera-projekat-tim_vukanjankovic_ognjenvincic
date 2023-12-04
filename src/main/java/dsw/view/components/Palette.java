@@ -3,8 +3,7 @@ package dsw.view.components;
 import dsw.controller.popups.PopupType;
 import dsw.core.Config;
 import dsw.state.State;
-import dsw.state.concrete.ConnectionState;
-import dsw.state.concrete.DiagramState;
+import dsw.state.concrete.*;
 import dsw.view.DiagramView;
 import dsw.view.MainFrame;
 
@@ -16,7 +15,7 @@ import java.awt.event.MouseEvent;
 
 public class Palette extends JToolBar {
 
-    private JButton diagramButton, connectionButton;
+    private JButton klasaButton, interfejsButton, enumButton, agregacijaButton, kompozicijaButton, zavisnostButton, generalizacijaButton;
     private JPanel row1, wrapper;
     public Palette() {
         super(VERTICAL);
@@ -31,11 +30,22 @@ public class Palette extends JToolBar {
 
         setSize(Integer.MAX_VALUE,  Integer.MAX_VALUE);
 
-        diagramButton = new JButton(MainFrame.getInstance().getActionManager().getElementAction());
-        connectionButton = new JButton(MainFrame.getInstance().getActionManager().getConnectionAction());
+        enumButton = new JButton(MainFrame.getInstance().getActionManager().getEnumAction());
+        klasaButton = new JButton(MainFrame.getInstance().getActionManager().getKlasaAction());
+        interfejsButton = new JButton(MainFrame.getInstance().getActionManager().getInterfejsAction());
+        agregacijaButton = new JButton(MainFrame.getInstance().getActionManager().getAgregacijaAction());
+        kompozicijaButton = new JButton(MainFrame.getInstance().getActionManager().getKompozicijaAction());
+        zavisnostButton = new JButton(MainFrame.getInstance().getActionManager().getZavisnostAction());
+        generalizacijaButton = new JButton(MainFrame.getInstance().getActionManager().getGeneralizacijaAction());
 
-        addElement(diagramButton);
-        addElement(connectionButton);
+
+        addElement(enumButton);
+        addElement(klasaButton);
+        addElement(interfejsButton);
+        addElement(agregacijaButton);
+        addElement(kompozicijaButton);
+        addElement(zavisnostButton);
+        addElement(generalizacijaButton);
 
         wrapper.add(row1);
         wrapper.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -46,13 +56,33 @@ public class Palette extends JToolBar {
     public void setSelectedButton(State state){
         DiagramView mv = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
         reset();
-        if (state instanceof DiagramState) {
+        if (state instanceof KlasaState) {
             if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            diagramButton.setBorder(Config.palleteSelectedBorder);
+            klasaButton.setBorder(Config.palleteSelectedBorder);
         }
-        if (state instanceof ConnectionState) {
+        if (state instanceof InterfejsState) {
             if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            connectionButton.setBorder(Config.palleteSelectedBorder);
+            interfejsButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof EnumState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            enumButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof AgregacijaState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            agregacijaButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof KompozicijaState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            kompozicijaButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof ZavisnostState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            zavisnostButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof GeneralizacijaState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            generalizacijaButton.setBorder(Config.palleteSelectedBorder);
         }
     }
 
@@ -66,9 +96,13 @@ public class Palette extends JToolBar {
 
     private void reset(){
         Border raisedBorder = Config.palleteDeselectedBorder;
-        diagramButton.setBorder(raisedBorder);
-        connectionButton.setBorder(raisedBorder);
-
+        klasaButton.setBorder(raisedBorder);
+        interfejsButton.setBorder(raisedBorder);
+        enumButton.setBorder(raisedBorder);
+        agregacijaButton.setBorder(raisedBorder);
+        kompozicijaButton.setBorder(raisedBorder);
+        zavisnostButton.setBorder(raisedBorder);
+        generalizacijaButton.setBorder(raisedBorder);
     }
 }
 

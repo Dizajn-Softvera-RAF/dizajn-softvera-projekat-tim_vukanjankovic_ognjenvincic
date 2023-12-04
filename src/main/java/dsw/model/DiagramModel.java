@@ -53,7 +53,7 @@ public class DiagramModel implements IPublisher {
         diagramElements =new ArrayList<>();
         alignmentLineX = new AlignmentLinePainter(new AlignmentLineElement(new Point(-1,-1), new Dimension(1,1), 1f, Color.PINK, Color.PINK, Color.black));
         alignmentLineY = new AlignmentLinePainter(new AlignmentLineElement(new Point(-1,-1), new Dimension(1,1), 1f, Color.PINK, Color.PINK, Color.black));
-        tempLine = new ConnectionPainter(new ConnectionElement(new Point(-1,-1), new Dimension(1,1), 1f, Color.GRAY, Color.GRAY, Color.black, new ConnectionLine(new Point(-1,-1), Color.GRAY, 1f)));
+        tempLine = new ConnectionPainter(new Generalizacija(new Point(-1,-1), new Dimension(1,1), 1f, Color.GRAY, Color.GRAY, Color.black, new ConnectionLine(new Point(-1,-1), Color.GRAY, 1f)));
         veze = new ArrayList<>();
         selectionDebug = new SelectedPainter(new SelectedElement(new Point(5,5), new Dimension(110,100), 1f, new Color(0,0,0,0), Color.RED, Color.black));
         polygon = null;
@@ -89,7 +89,7 @@ public class DiagramModel implements IPublisher {
 
     public void addConnection(Point p) {
         if (p.getX() == p.getY()) return;
-        ConnectionElement ce = new ConnectionElement(new Point(-1,-1), new Dimension(1,1), 10f, Color.black, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+        ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.black, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
         ce.setDevice1(diagramElements.get(p.x));
         ce.setDevice2(diagramElements.get(p.y));
         ce.setStrokeWidth(1f);
@@ -240,7 +240,7 @@ public class DiagramModel implements IPublisher {
 
         for(DevicePainter devicePainter : veze){
 
-            ConnectionElement connectionElement = new ConnectionElement(
+            ConnectionElement connectionElement = new Agregacija(
                     new Point(0, 0),
                     new Dimension(1,1),
                     devicePainter.getDevice().getStrokeWidth(),

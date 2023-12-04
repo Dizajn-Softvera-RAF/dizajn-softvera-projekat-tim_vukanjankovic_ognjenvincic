@@ -7,9 +7,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class NewConnectionAction extends AbstractClassyAction{
-
-    public NewConnectionAction() {
+public class NewKompozicijaAction extends AbstractClassyAction{
+    public NewKompozicijaAction() {
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
         putValue(SMALL_ICON, Utils.loadIcon("/images/add.png", 32, 32));
         putValue(NAME, "New Connection");
@@ -17,7 +16,6 @@ public class NewConnectionAction extends AbstractClassyAction{
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        MainFrame.getInstance().getProjectView().startConnectionState();
+        MainFrame.getInstance().getProjectView().startKompozicijaState();
     }
-
 }

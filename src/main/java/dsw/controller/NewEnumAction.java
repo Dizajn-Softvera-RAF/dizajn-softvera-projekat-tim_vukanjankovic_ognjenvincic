@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class NewElementAction extends AbstractClassyAction {
-    public NewElementAction() {
+public class NewEnumAction extends AbstractClassyAction{
+    public NewEnumAction() {
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
         putValue(SMALL_ICON, loadIcon("/images/diagram.png"));
         putValue(NAME, "New mind map");
@@ -16,6 +16,6 @@ public class NewElementAction extends AbstractClassyAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        MainFrame.getInstance().getProjectView().startDiagramState();
+        MainFrame.getInstance().getProjectView().startEnumState();
     }
 }

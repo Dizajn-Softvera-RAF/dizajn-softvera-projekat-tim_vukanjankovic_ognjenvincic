@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.awt.*;
 
-public class ConnectionElement extends DiagramDevice{
+public abstract class ConnectionElement extends DiagramDevice{
 
     @Getter
     @Setter

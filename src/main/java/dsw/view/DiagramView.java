@@ -3,6 +3,7 @@ package dsw.view;
 import dsw.controller.MouseController;
 import dsw.controller.MouseDragController;
 import dsw.core.Config;
+import dsw.model.elements.Agregacija;
 import dsw.model.elements.ConnectionElement;
 import dsw.model.elements.SelectedElement;
 import dsw.model.helpers.ConnectionLine;
@@ -66,7 +67,7 @@ public class DiagramView extends JPanel implements ISubscriber {
 
 
             // Pravljenje nove linije na osnovu dobijenih tacaka
-            DevicePainter line = new ConnectionPainter(new ConnectionElement(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement)ce.getDevice()).getConnectionLine()));
+            DevicePainter line = new ConnectionPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement)ce.getDevice()).getConnectionLine()));
             line.getDevice().setSelected(ce.getDevice().isSelected());
             ((ConnectionElement)line.getDevice()).setDevice1(start);
             ((ConnectionElement)line.getDevice()).setDevice2(end);
@@ -75,7 +76,7 @@ public class DiagramView extends JPanel implements ISubscriber {
 
             // Provera da li je linija selektovana
             if (diagram.getModel().getVeze().get(i).getDevice().isSelected()) {
-                DevicePainter selected = new ConnectionPainter(new ConnectionElement(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth()+2, new Color(0,0,0,0), Color.BLUE, Color.BLUE, new ConnectionLine(new Point(-1,-1), Color.gray, 1f)));
+                DevicePainter selected = new ConnectionPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth()+2, new Color(0,0,0,0), Color.BLUE, Color.BLUE, new ConnectionLine(new Point(-1,-1), Color.gray, 1f)));
                 selected.paint(g2, selected.getDevice());
             }
             line.paint(g2, line.getDevice());
@@ -139,10 +140,10 @@ public class DiagramView extends JPanel implements ISubscriber {
 
         // Crtanje okvira koji ne dozvoljava da se izadje iz mape
         if (Config.DEBUG) {
-            DevicePainter b1 = new ConnectionPainter(new ConnectionElement(new Point(1,1), new Dimension(getSize().width-1,1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b2 = new ConnectionPainter(new ConnectionElement(new Point(1,1), new Dimension(1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b3 = new ConnectionPainter(new ConnectionElement(new Point(getSize().width-1,1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b4 = new ConnectionPainter(new ConnectionElement(new Point(1,getSize().height-1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            DevicePainter b1 = new ConnectionPainter(new Agregacija(new Point(1,1), new Dimension(getSize().width-1,1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            DevicePainter b2 = new ConnectionPainter(new Agregacija(new Point(1,1), new Dimension(1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            DevicePainter b3 = new ConnectionPainter(new Agregacija(new Point(getSize().width-1,1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            DevicePainter b4 = new ConnectionPainter(new Agregacija(new Point(1,getSize().height-1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
 
             b1.paint(g2, b1.getDevice());
             b2.paint(g2, b2.getDevice());

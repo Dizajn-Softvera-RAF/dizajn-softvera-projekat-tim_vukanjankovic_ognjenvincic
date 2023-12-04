@@ -80,12 +80,32 @@ public class ProjectView extends JPanel implements ISubscriber {
         }
     }
 
-    public void startConnectionState(){
-        stateManager.setConnectionState();
+    public void startAgregacijaState(){
+        stateManager.setAgregacijaState();
         MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
     }
-    public void startDiagramState(){
-        stateManager.setDiagramState();
+    public void startKompozicijaState(){
+        stateManager.setKompozicijaState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startZavisnostState(){
+        stateManager.setZavisnostState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startGeneralizacijaState(){
+        stateManager.setGeneralizacijaState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startKlasaState(){
+        stateManager.setKlasaState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startInterfejsState(){
+        stateManager.setInterfejsState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startEnumState(){
+        stateManager.setEnumState();
         MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
     }
 }
