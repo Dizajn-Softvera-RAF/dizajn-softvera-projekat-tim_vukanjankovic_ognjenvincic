@@ -15,8 +15,8 @@ import java.awt.event.MouseEvent;
 
 public class Palette extends JToolBar {
 
-    private JButton klasaButton, interfejsButton, enumButton, agregacijaButton, kompozicijaButton, zavisnostButton, generalizacijaButton;
-    private JPanel row1, wrapper;
+    private JButton klasaButton, interfejsButton, enumButton, agregacijaButton, kompozicijaButton, zavisnostButton, generalizacijaButton, zoomInButton, zoomOutButton, selectionButton, moveButton, deleteButton;
+    private JPanel row1, row2, wrapper;
     public Palette() {
         super(VERTICAL);
         setFloatable(false);
@@ -25,6 +25,10 @@ public class Palette extends JToolBar {
 
         row1 = new JPanel();
         row1.setLayout(new BoxLayout(row1, BoxLayout.Y_AXIS));
+        row2 = new JPanel();
+        row2.setLayout(new BoxLayout(row2, BoxLayout.Y_AXIS));
+
+        row2.setAlignmentY(Component.TOP_ALIGNMENT);
         row1.setAlignmentY(Component.TOP_ALIGNMENT);
         wrapper.setAlignmentY(Component.TOP_ALIGNMENT);
 
@@ -37,7 +41,11 @@ public class Palette extends JToolBar {
         kompozicijaButton = new JButton(MainFrame.getInstance().getActionManager().getKompozicijaAction());
         zavisnostButton = new JButton(MainFrame.getInstance().getActionManager().getZavisnostAction());
         generalizacijaButton = new JButton(MainFrame.getInstance().getActionManager().getGeneralizacijaAction());
-
+        zoomInButton = new JButton(MainFrame.getInstance().getActionManager().getZoomInAction());
+        zoomOutButton = new JButton(MainFrame.getInstance().getActionManager().getZoomOutAction());
+        selectionButton = new JButton(MainFrame.getInstance().getActionManager().getSelectionAction());
+        moveButton = new JButton(MainFrame.getInstance().getActionManager().getMoveAction());
+        deleteButton = new JButton(MainFrame.getInstance().getActionManager().getDeletePainterAction());
 
         addElement(enumButton);
         addElement(klasaButton);
@@ -46,11 +54,19 @@ public class Palette extends JToolBar {
         addElement(kompozicijaButton);
         addElement(zavisnostButton);
         addElement(generalizacijaButton);
+        addElement(zoomInButton);
+        addElement(zoomOutButton);
+        addElement(selectionButton);
+        addElement(moveButton);
+        addElement(deleteButton);
 
         wrapper.add(row1);
         wrapper.add(Box.createRigidArea(new Dimension(5, 0)));
+        wrapper.add(row2);
         add(wrapper);
 
+        reset();
+        setSelectedButton(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState());
     }
 
     public void setSelectedButton(State state){
@@ -84,14 +100,27 @@ public class Palette extends JToolBar {
             if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
             generalizacijaButton.setBorder(Config.palleteSelectedBorder);
         }
+        if (state instanceof SelectionState) {
+            if (mv != null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            selectionButton.setBorder(Config.palleteSelectedBorder);
+        }
+        if (state instanceof MoveState) {
+            if (mv!=null) mv.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            moveButton.setBorder(Config.palleteSelectedBorder);
+        }
+
     }
 
     private void addElement(JButton button) {
         button.setText("");
         button.setAlignmentY(Component.TOP_ALIGNMENT);
-        row1.add(button);
-        row1.add(Box.createRigidArea(new Dimension(0, 5)));
-
+        if (row1.getComponentCount() > row2.getComponentCount()) {
+            row2.add(button);
+            row2.add(Box.createRigidArea(new Dimension(0, 5)));
+        } else {
+            row1.add(button);
+            row1.add(Box.createRigidArea(new Dimension(0, 5)));
+        }
     }
 
     private void reset(){
@@ -103,6 +132,11 @@ public class Palette extends JToolBar {
         kompozicijaButton.setBorder(raisedBorder);
         zavisnostButton.setBorder(raisedBorder);
         generalizacijaButton.setBorder(raisedBorder);
+        zoomOutButton.setBorder(raisedBorder);
+        zoomInButton.setBorder(raisedBorder);
+        selectionButton.setBorder(raisedBorder);
+        moveButton.setBorder(raisedBorder);
+        deleteButton.setBorder(raisedBorder);
     }
 }
 

@@ -19,6 +19,8 @@ public class StateManager {
     private KompozicijaState kompozicijaState;
     private ZavisnostState zavisnostState;
     private GeneralizacijaState generalizacijaState;
+    private SelectionState selectionState;
+    private MoveState moveState;
 
     public StateManager() {
         initStates();
@@ -32,6 +34,8 @@ public class StateManager {
         klasaState = new KlasaState();
         interfejsState = new InterfejsState();
         enumState = new EnumState();
+        selectionState = new SelectionState();
+        moveState = new MoveState();
 
         currentState = klasaState;
     }
@@ -58,4 +62,6 @@ public class StateManager {
     public void setEnumState(){
         currentState = enumState;
     }
+    public void setSelectionState(){currentState = selectionState;}
+    public void setMoveState(){currentState = moveState;}
 }

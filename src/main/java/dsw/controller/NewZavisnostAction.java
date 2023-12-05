@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class NewZavisnostAction extends AbstractClassyAction{
     public NewZavisnostAction() {
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
-        putValue(SMALL_ICON, Utils.loadIcon("/images/add.png", 32, 32));
+        putValue(SMALL_ICON, Utils.loadIcon("/images/dependency.png", 32, 32));
         putValue(NAME, "New Connection");
         putValue(SHORT_DESCRIPTION, "New Connection");
     }

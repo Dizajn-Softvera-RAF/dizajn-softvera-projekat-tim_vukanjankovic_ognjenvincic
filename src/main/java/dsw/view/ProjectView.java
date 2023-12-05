@@ -7,6 +7,7 @@ import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import lombok.Getter;
 import lombok.Setter;
+import sun.applet.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,6 +107,14 @@ public class ProjectView extends JPanel implements ISubscriber {
     }
     public void startEnumState(){
         stateManager.setEnumState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startSelectionState(){
+        stateManager.setSelectionState();
+        MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
+    }
+    public void startMoveState(){
+        stateManager.setMoveState();
         MainFrame.getInstance().getPallete().setSelectedButton(stateManager.getCurrentState());
     }
 }

@@ -22,7 +22,11 @@ public class ActionManager {
     private NewKlasaAction klasaAction;
     private NewInterfejsAction interfejsAction;
     private NewEnumAction enumAction;
-
+    private ZoomOutAction zoomOutAction;
+    private ZoomInAction zoomInAction;
+    private SelectionAction selectionAction;
+    private MoveAction moveAction;
+    private DeletePainterAction deletePainterAction;
 
     public ActionManager(){initialiseActions();}
 
@@ -42,6 +46,11 @@ public class ActionManager {
         klasaAction = new NewKlasaAction();
         interfejsAction = new NewInterfejsAction();
         enumAction = new NewEnumAction();
+        zoomOutAction = new ZoomOutAction();
+        zoomInAction = new ZoomInAction();
+        selectionAction = new SelectionAction();
+        moveAction = new MoveAction();
+        deletePainterAction = new DeletePainterAction();
     }
 
 }
