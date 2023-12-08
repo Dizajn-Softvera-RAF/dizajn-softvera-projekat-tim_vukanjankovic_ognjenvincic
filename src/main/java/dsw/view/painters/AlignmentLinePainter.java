@@ -1,13 +1,13 @@
 package dsw.view.painters;
 
-import dsw.model.elements.DiagramDevice;
+import dsw.model.elements.Interclass;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-public class AlignmentLinePainter extends DevicePainter{
+public class AlignmentLinePainter extends InterclassPainter {
 
-    public AlignmentLinePainter(DiagramDevice device) {
+    public AlignmentLinePainter(Interclass device) {
         super(device);
         updateShape();
     }

@@ -23,13 +23,6 @@ public class Tree<DevicePainter> {
         this.drawn = false;
     }
 
-    public void draw() {
-        drawn = true;
-    }
-
-    public boolean isDrawn() {
-        return drawn;
-    }
 
     public void addChild(DevicePainter child, DevicePainter parent) {
         Tree root = this;
@@ -40,10 +33,6 @@ public class Tree<DevicePainter> {
 //            System.out.println("Adding child " + ((RectanglePainter)child).getDevice().getName() + " to parent " + ((RectanglePainter)parent).getDevice().getName());
             node.children.add(new Tree(model, child, node));
         }
-    }
-
-    public int getChildCount() {
-        return children.size();
     }
 
     private Tree findNode(DevicePainter node) {

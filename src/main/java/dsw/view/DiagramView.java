@@ -3,16 +3,15 @@ package dsw.view;
 import dsw.controller.MouseController;
 import dsw.controller.MouseDragController;
 import dsw.core.Config;
-import dsw.model.elements.Agregacija;
-import dsw.model.elements.ConnectionElement;
-import dsw.model.elements.SelectedElement;
+import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.ISubscriber;
 import dsw.repository.implementation.Diagram;
-import dsw.view.painters.ConnectionPainter;
-import dsw.view.painters.DevicePainter;
-import dsw.view.painters.ElementPainter;
-import dsw.view.painters.SelectedPainter;
+import dsw.state.concrete.AgregacijaState;
+import dsw.state.concrete.GeneralizacijaState;
+import dsw.state.concrete.KompozicijaState;
+import dsw.state.concrete.ZavisnostState;
+import dsw.view.painters.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,6 @@ public class DiagramView extends JPanel implements ISubscriber {
         this.diagram = diagram;
 
         setName(diagram.getName());
-//        setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         diagram.getModel().addSubscriber(this);
 
@@ -55,28 +53,39 @@ public class DiagramView extends JPanel implements ISubscriber {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-        Iterator<DevicePainter> it = diagram.getModel().getDeviceIterator();
+        Iterator<InterclassPainter> it = diagram.getModel().getDeviceIterator();
         int i = 0;
         for (ConnectionPainter ce : diagram.getModel().getVeze()) {
 
             // Dobijanje pocetne i krajnje tacke veze
-            DevicePainter start = ((ConnectionElement)ce.getDevice()).getDevice1();
-            DevicePainter end = ((ConnectionElement)ce.getDevice()).getDevice2();
+            InterclassPainter start = (ce.getDevice()).getDevice1();
+            InterclassPainter end = (ce.getDevice()).getDevice2();
             Point p1 = new Point((int)Math.floor(start.getDevice().getPosition().getX()), (int)Math.floor(start.getDevice().getPosition().getY()));
             Point p2 = new Point((int)Math.floor(end.getDevice().getPosition().getX()), (int)Math.floor(end.getDevice().getPosition().getY()));
-
+            ConnectionPainter line = null;
 
             // Pravljenje nove linije na osnovu dobijenih tacaka
-            DevicePainter line = new ConnectionPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement)ce.getDevice()).getConnectionLine()));
+            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState) {
+                 line = new AgregacijaPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+            }else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
+                 line = new GeneralizacijaPainter(new Generalizacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+            }
+            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
+                 line = new KompozicijaPainter(new Kompozicija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+            }
+            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
+                 line = new ZavisnostPainter(new Zavisnost(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+            }
             line.getDevice().setSelected(ce.getDevice().isSelected());
-            ((ConnectionElement)line.getDevice()).setDevice1(start);
-            ((ConnectionElement)line.getDevice()).setDevice2(end);
+            (line.getDevice()).setDevice1(start);
+            (line.getDevice()).setDevice2(end);
             line.getDevice().setStrokeWidth(ce.getDevice().getStrokeWidth());
-            diagram.getModel().getVeze().set(i, (ConnectionPainter) line);
+            diagram.getModel().getVeze().set(i, line);
 
             // Provera da li je linija selektovana
             if (diagram.getModel().getVeze().get(i).getDevice().isSelected()) {
-                DevicePainter selected = new ConnectionPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth()+2, new Color(0,0,0,0), Color.BLUE, Color.BLUE, new ConnectionLine(new Point(-1,-1), Color.gray, 1f)));
+                ConnectionPainter selected = new AgregacijaPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth() + 2, new Color(0, 0, 0, 0), Color.BLUE, Color.BLUE, new ConnectionLine(new Point(-1, -1), Color.gray, 1f))) {
+                };
                 selected.paint(g2, selected.getDevice());
             }
             line.paint(g2, line.getDevice());
@@ -85,7 +94,7 @@ public class DiagramView extends JPanel implements ISubscriber {
 
 
         while(it.hasNext()){
-            DevicePainter d = it.next();
+            InterclassPainter d = it.next();
 
             // Racunanje hitboxa pojma
             double x = d.getDevice().getPosition().getX();
@@ -100,7 +109,7 @@ public class DiagramView extends JPanel implements ISubscriber {
 
             // Provera da li je pojam selektovan
             if (diagram.getModel().getSelectedElements().contains(d)) {
-                DevicePainter selected = new SelectedPainter(new SelectedElement(new Point((int) x - 5, (int) y - 5), new Dimension((int) width + 10, (int) height + 10), d.getDevice().getStrokeWidth(), new Color(0,0,0,0), Color.BLUE, Color.black));
+                InterclassPainter selected = new SelectedPainter(new SelectedElement(new Point((int) x - 5, (int) y - 5), new Dimension((int) width + 10, (int) height + 10), d.getDevice().getStrokeWidth(), new Color(0,0,0,0), Color.BLUE, Color.black));
                 selected.paint(g2, selected.getDevice());
             }
 
@@ -138,12 +147,12 @@ public class DiagramView extends JPanel implements ISubscriber {
             painter.paint(g2, diagram.getModel().getSelectionLine().getDevice());
         }
 
-        // Crtanje okvira koji ne dozvoljava da se izadje iz mape
+        // Crtanje okvira koji ne dozvoljava da se izadje iz diagrama
         if (Config.DEBUG) {
-            DevicePainter b1 = new ConnectionPainter(new Agregacija(new Point(1,1), new Dimension(getSize().width-1,1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b2 = new ConnectionPainter(new Agregacija(new Point(1,1), new Dimension(1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b3 = new ConnectionPainter(new Agregacija(new Point(getSize().width-1,1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
-            DevicePainter b4 = new ConnectionPainter(new Agregacija(new Point(1,getSize().height-1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            ConnectionPainter b1 = new AgregacijaPainter(new Agregacija(new Point(1,1), new Dimension(getSize().width-1,1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            ConnectionPainter b2 = new AgregacijaPainter(new Agregacija(new Point(1,1), new Dimension(1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            ConnectionPainter b3 = new AgregacijaPainter(new Agregacija(new Point(getSize().width-1,1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
+            ConnectionPainter b4 = new AgregacijaPainter(new Agregacija(new Point(1,getSize().height-1), new Dimension(getSize().width-1,getSize().height-1), 1f, Color.RED, Color.RED, Color.black, new ConnectionLine(new Point(-1,-1), Color.RED, 1f)));
 
             b1.paint(g2, b1.getDevice());
             b2.paint(g2, b2.getDevice());

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.awt.*;
 
-public abstract class DiagramDevice extends DiagramElement {
+public abstract class Interclass extends DiagramElement {
 
     protected Dimension size;
     protected Point position;
@@ -18,7 +18,7 @@ public abstract class DiagramDevice extends DiagramElement {
     @Setter
     protected Shapes pojamShape;
 
-    protected DiagramDevice(Point position, Dimension size, float stroke, Paint paint, Paint borderPaint, Paint textPaint) {
+    protected Interclass(Point position, Dimension size, float stroke, Paint paint, Paint borderPaint, Paint textPaint) {
         super(stroke, paint, borderPaint, textPaint);
         this.size = size;
         this.position = position;

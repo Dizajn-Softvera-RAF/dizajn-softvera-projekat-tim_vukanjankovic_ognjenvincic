@@ -1,6 +1,6 @@
 package dsw.view.painters;
 
-import dsw.model.elements.DiagramDevice;
+import dsw.model.elements.Interclass;
 import dsw.model.elements.DiagramElement;
 import dsw.model.elements.RectangleElement;
 import dsw.view.DiagramView;
@@ -10,20 +10,20 @@ import lombok.Setter;
 
 import java.awt.*;
 
-public class DevicePainter extends ElementPainter {
+public class InterclassPainter extends ElementPainter {
     protected Shape shape;
     @Getter
     @Setter
-    protected DiagramDevice device;
+    protected Interclass device;
 
-    public DevicePainter(DiagramDevice device){
+    public InterclassPainter(Interclass device){
 
         super(device);
         this.device = device;
     }
 
     public void paint(Graphics2D g, DiagramElement element){
-        device = (DiagramDevice )element;
+        device = (Interclass)element;
         if (this instanceof RectanglePainter) {
 
             g.setFont(new Font("Verdana", Font.PLAIN, 12));
@@ -43,9 +43,6 @@ public class DevicePainter extends ElementPainter {
                     dv.getDiagram().getModel().getDiagramElements().get(i).getDevice().setDimension(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
                 }
             }
-
-
-
         }
 
 
@@ -82,9 +79,6 @@ public class DevicePainter extends ElementPainter {
 
             g.drawString(device.getName(), x, y);
         }
-
-
-
 
     }
 

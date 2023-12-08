@@ -1,9 +1,6 @@
 package dsw.model.elements;
 
 import dsw.model.helpers.ConnectionLine;
-import dsw.view.painters.DevicePainter;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.awt.*;
 

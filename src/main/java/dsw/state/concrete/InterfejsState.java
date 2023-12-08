@@ -5,6 +5,7 @@ import dsw.core.Config;
 import dsw.core.logger.MessageType;
 import dsw.model.DiagramModel;
 import dsw.model.elements.ConnectionElement;
+import dsw.model.elements.Interfejs;
 import dsw.model.elements.RectangleElement;
 import dsw.model.helpers.ClickedValue;
 import dsw.model.helpers.Tree;
@@ -28,23 +29,15 @@ public class InterfejsState extends AbstractState implements State {
     @Override
     public void mouseClicked(MouseEvent e, Diagram diagram) {
         retries = 0;
-        for (DevicePainter painter : diagram.getModel().getDiagramElements()) {
-            if (painter.getDevice().getPojamShape() == Shapes.MAIN && Config.SHAPE == Shapes.MAIN) {
-                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.MAIN_ALREADY_EXISTS);
-                return;
-            }
-        }
-        ClickedValue clickedValue = getClickedIndex(mapPoint(e.getPoint(), diagram.getModel()), diagram);
+        ClickedValue clickedValue = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
-        String name = "Element " + diagram.getModel().getElementCount();
-        DiagramModel oldModel = diagram.getModel().getClone();
-        RectangleElement rectangle = null;
+        String name = "<<Interface>> \n Class " + diagram.getModel().getElementCount();
+        Interfejs interfejs = null;
         int x, y;
 
         if (clickedValue != null && clickedValue.getType() == 0) {
-            RectangleElement element = ((RectangleElement) clickedValue.getD().getDevice());
-            Point spot = getAvailableSpot(((RectanglePainter) clickedValue.getD()), diagram.getModel());
+            Point spot = getAvailableSpot((InterclassPainter) clickedValue.getD(), diagram.getModel());
 
             if (spot == null) {
 
@@ -58,38 +51,32 @@ public class InterfejsState extends AbstractState implements State {
                 x = view.getSize().width / 2;
                 y = view.getSize().height / 2;
             } else {
-                x = mapPoint(e.getPoint(), diagram.getModel()).x;
-                y = mapPoint(e.getPoint(), diagram.getModel()).y;
+                x = diagramPoint(e.getPoint(), diagram.getModel()).x;
+                y = diagramPoint(e.getPoint(), diagram.getModel()).y;
             }
         }
 
         if (Config.SHAPE == Shapes.MAIN) {
-            rectangle=new RectangleElement(new Point(view.getSize().width / 2, view.getSize().height / 2), new Dimension(74,60),
+            interfejs=new Interfejs(new Point(view.getSize().width / 2, view.getSize().height / 2), new Dimension(74,60),
                     2f, new Color(121, 207, 246), Color.black, Color.black);
         } else {
-            rectangle=new RectangleElement(new Point(x, y), new Dimension(74,50),
+            interfejs=new Interfejs(new Point(x, y), new Dimension(74,50),
                     2f, new Color(121, 207, 246), Color.black, Color.black);
         }
 
-        rectangle.setName(name);
-        diagram.getModel().addDiagramElements(new KlasaPainter(rectangle));
+        interfejs.setName(name);
+        diagram.getModel().addDiagramElements(new InterclassPainter(interfejs));
 
     }
 
-    private Point getAvailableSpot(RectanglePainter e, DiagramModel model) {
+    private Point getAvailableSpot(InterclassPainter e, DiagramModel model) {
         retries++;
-        RectangleElement element = (RectangleElement) e.getDevice();
+        Interfejs interfejs = (Interfejs) e.getDevice();
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
         int x = (int) (e.getDevice().getPosition().getX()-37);
         int y = (int) (e.getDevice().getPosition().getY()-25);
-
-
-        for (DevicePainter painter : model.getDiagramElements()) {
-
-
-        }
 
         return new Point(x+37, y+25);
     }
@@ -101,38 +88,32 @@ public class InterfejsState extends AbstractState implements State {
     @Override
     public void mouseReleased(MouseEvent e, Diagram diagram) {
         if (!e.isPopupTrigger()) return;
-        ClickedValue clicked = getClickedIndex(mapPoint(e.getPoint(), diagram.getModel()), diagram);
+        ClickedValue clicked = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (clicked == null) return;
         if (clicked.getType() != 0) return;
-        for (DevicePainter painter : diagram.getModel().getDiagramElements()) {
-            if (painter.getDevice().getPojamShape() == Shapes.MAIN && painter != clicked.getD()) {
-                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.MAIN_ALREADY_EXISTS);
-                return;
-            }
-        }
         clicked.getD().getDevice().setPojamShape(Shapes.MAIN);
 
-        bfsOrder(diagram.getModel(), (RectanglePainter) clicked.getD());
+        bfsOrder(diagram.getModel(),  clicked.getD());
 
         diagram.getModel().notifySubscribers(null);
     }
 
-    private Queue<QueueValue> getConnectedDevices(DevicePainter painter, DiagramModel model) {
+    private Queue<QueueValue> getConnectedDevices(InterclassPainter painter, DiagramModel model) {
         Queue<QueueValue> list = new LinkedList<>();
         for (ConnectionPainter connection : model.getVeze()) {
-            if (((ConnectionElement)connection.getDevice()).getDevice1() == painter) {
-                list.add(new QueueValue( ((ConnectionElement)connection.getDevice()).getDevice2(),  ((ConnectionElement)connection.getDevice()).getDevice1()  ));
-            } else if (((ConnectionElement)connection.getDevice()).getDevice2() == painter) {
-                list.add(new QueueValue( ((ConnectionElement)connection.getDevice()).getDevice1(),  ((ConnectionElement)connection.getDevice()).getDevice2()  ));
+            if ((connection.getDevice()).getDevice1() == painter) {
+                list.add(new QueueValue( (connection.getDevice()).getDevice2(),  (connection.getDevice()).getDevice1()  ));
+            } else if ((connection.getDevice()).getDevice2() == painter) {
+                list.add(new QueueValue( (connection.getDevice()).getDevice1(),  (connection.getDevice()).getDevice2()  ));
             }
         }
         return list;
     }
-    private void draw(RectanglePainter parent, Tree tree, DiagramModel model) {
+    private void draw(InterclassPainter parent, Tree tree, DiagramModel model) {
         for (Object t : tree.children) {
             Tree child = (Tree) t;
 
-            RectanglePainter painter = (RectanglePainter)child.getRoot();
+            InterclassPainter painter = (InterclassPainter) child.getRoot();
 
             painter.getDevice().setPosition(getAvailableSpot(parent, model));
 
@@ -140,9 +121,9 @@ public class InterfejsState extends AbstractState implements State {
         }
     }
 
-    private int getNumberOfConnections(DevicePainter root, DiagramModel model) {
+    private int getNumberOfConnections(InterclassPainter root, DiagramModel model) {
         Queue<QueueValue> queue = getConnectedDevices(root, model);
-        ArrayList visited = new ArrayList<DevicePainter>();
+        ArrayList visited = new ArrayList<InterclassPainter>();
         while (!queue.isEmpty()) {
             QueueValue qv = queue.poll();
             if (!visited.contains(qv.child)) {
@@ -153,7 +134,7 @@ public class InterfejsState extends AbstractState implements State {
         return visited.size();
     }
 
-    private void bfsOrder(DiagramModel model, RectanglePainter root) {
+    private void bfsOrder(DiagramModel model, InterclassPainter root) {
 
         Tree tree = new Tree(model, root, null);
         System.out.println(getNumberOfConnections(root, model));
@@ -188,10 +169,10 @@ public class InterfejsState extends AbstractState implements State {
     }
 
     private class QueueValue {
-        DevicePainter child;
-        DevicePainter parent;
+        InterclassPainter child;
+        InterclassPainter parent;
 
-        public QueueValue(DevicePainter child, DevicePainter parent) {
+        public QueueValue(InterclassPainter child, InterclassPainter parent) {
             this.child = child;
             this.parent = parent;
         }

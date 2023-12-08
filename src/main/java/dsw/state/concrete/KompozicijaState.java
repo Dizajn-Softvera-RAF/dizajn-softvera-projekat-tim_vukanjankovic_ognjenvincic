@@ -14,12 +14,12 @@ public class KompozicijaState extends AbstractState implements State {
 
     @Override
     public void mouseClicked(MouseEvent e, Diagram diagram) {
-        startPoint = mapPoint(e.getPoint(), diagram.getModel());
+        startPoint = diagramPoint(e.getPoint(), diagram.getModel());
     }
 
     @Override
     public void mouseDragged(MouseEvent e, Diagram diagram) {
-        diagram.getModel().setTempLine(startPoint,mapPoint(e.getPoint(), diagram.getModel()));
+        diagram.getModel().setTempLine(startPoint, diagramPoint(e.getPoint(), diagram.getModel()));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class KompozicijaState extends AbstractState implements State {
         clearSelection(diagram);
         DiagramModel oldModel = diagram.getModel().getClone();
         ClickedValue start = getClickedIndex(startPoint, diagram);
-        ClickedValue end = getClickedIndex(mapPoint(e.getPoint(), diagram.getModel()), diagram);
+        ClickedValue end = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (start == null || end == null) {
             startPoint = new Point(-1,-1);
             clearLine(diagram);

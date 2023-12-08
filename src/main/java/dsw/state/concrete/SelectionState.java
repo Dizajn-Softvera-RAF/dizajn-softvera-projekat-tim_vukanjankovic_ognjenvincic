@@ -9,7 +9,7 @@ import dsw.model.helpers.SelectionTool;
 import dsw.repository.implementation.Diagram;
 import dsw.state.AbstractState;
 import dsw.state.State;
-import dsw.view.painters.DevicePainter;
+import dsw.view.painters.InterclassPainter;
 import dsw.view.painters.RectanglePainter;
 
 import java.awt.*;
@@ -27,9 +27,9 @@ public class SelectionState extends AbstractState implements State {
             diagram.getModel().clearSelecterElements();
         }
 
-        ClickedValue clicked = getClickedIndex(mapPoint(e.getPoint(), diagram.getModel()), diagram);
+        ClickedValue clicked = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (clicked != null) {
-            DevicePainter device = clicked.getD();
+            InterclassPainter device = (InterclassPainter) clicked.getD();
             int index = clicked.getIndex();
             if (clicked.getType() == 0) {
                 if (diagram.getModel().getSelectedElements().contains(device)) {
@@ -37,7 +37,7 @@ public class SelectionState extends AbstractState implements State {
                 } else {
                     diagram.getModel().addSelectedElements(device);
                 }
-                DevicePainter temp = diagram.getModel().getDiagramElements().get(diagram.getModel().getDiagramElements().size()-1);
+                InterclassPainter temp = diagram.getModel().getDiagramElements().get(diagram.getModel().getDiagramElements().size()-1);
                 diagram.getModel().getDiagramElements().set(diagram.getModel().getDiagramElements().size()-1, device);
                 diagram.getModel().getDiagramElements().set(index, temp);
             } else {
@@ -49,7 +49,7 @@ public class SelectionState extends AbstractState implements State {
 
 
         if (Config.SELECTION_TOOL == SelectionTool.POLYGON) {
-            Point p = mapPoint(e.getPoint(), diagram.getModel());
+            Point p = diagramPoint(e.getPoint(), diagram.getModel());
 
             diagram.getModel().setPolygon(new Polygon());
             diagram.getModel().getPolygon().addPoint(p.x, p.y);
@@ -57,7 +57,7 @@ public class SelectionState extends AbstractState implements State {
         }
 
         if (Config.SELECTION_TOOL == SelectionTool.RECTANGLE) {
-            startPoint = mapPoint(e.getPoint(), diagram.getModel());
+            startPoint = diagramPoint(e.getPoint(), diagram.getModel());
             diagram.getModel().notifySubscribers(null);
         }
     }
@@ -68,14 +68,14 @@ public class SelectionState extends AbstractState implements State {
         if ((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK)return;
 
         if (Config.SELECTION_TOOL == SelectionTool.POLYGON) {
-            Point p = mapPoint(e.getPoint(), diagram.getModel());
+            Point p = diagramPoint(e.getPoint(), diagram.getModel());
             diagram.getModel().getPolygon().addPoint(p.x, p.y);
             diagram.getModel().notifySubscribers(null);
             return;
         }
 
         if (Config.SELECTION_TOOL == SelectionTool.RECTANGLE) {
-            Point p = mapPoint(e.getPoint(), diagram.getModel());
+            Point p = diagramPoint(e.getPoint(), diagram.getModel());
 
             int px = (int) Math.min(startPoint.x,p.getX());
             int py = (int) Math.min(startPoint.y,p.getY());
@@ -97,7 +97,7 @@ public class SelectionState extends AbstractState implements State {
                 return;
             }
             diagram.getModel().clearSelecterElements();
-            for (DevicePainter d : diagram.getModel().getDiagramElements()) {
+            for (InterclassPainter d : diagram.getModel().getDiagramElements()) {
                 if (isInside((RectanglePainter) d, diagram.getModel())) {
                     diagram.getModel().addSelectedElements(d);
                 }
@@ -110,7 +110,7 @@ public class SelectionState extends AbstractState implements State {
         }
 
         if (Config.SELECTION_TOOL == SelectionTool.RECTANGLE) {
-            endPoint = mapPoint(e.getPoint(), diagram.getModel());
+            endPoint = diagramPoint(e.getPoint(), diagram.getModel());
             if (Math.abs(startPoint.x-endPoint.x) < 2 && Math.abs(startPoint.y-endPoint.y) < 2) {
                 diagram.getModel().setSelectionLine(new Point(-1, -1), new Dimension(1,1));
                 diagram.getModel().notifySubscribers(null);
@@ -118,7 +118,7 @@ public class SelectionState extends AbstractState implements State {
             }
             diagram.getModel().clearSelecterElements();
 
-            for(DevicePainter d : diagram.getModel().getDiagramElements()){
+            for(InterclassPainter d : diagram.getModel().getDiagramElements()){
 
                 if(isInside((RectanglePainter) d, diagram.getModel())) diagram.getModel().addSelectedElements(d);
 
@@ -126,14 +126,6 @@ public class SelectionState extends AbstractState implements State {
             diagram.getModel().setSelectionLine(new Point(-1, -1), new Dimension(1,1));
             diagram.getModel().notifySubscribers(null);
         }
-    }
-
-    private ArrayList<PointCustom> getPoints(Polygon p) {
-        ArrayList<PointCustom> points = new ArrayList<>();
-        for (int i = 0; i < p.npoints; i++) {
-            points.add(new PointCustom(p.xpoints[i], p.ypoints[i]));
-        }
-        return points;
     }
 
     public boolean isInside(RectanglePainter d1, DiagramModel diagramModel){

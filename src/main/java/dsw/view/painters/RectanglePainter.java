@@ -1,7 +1,7 @@
 package dsw.view.painters;
 
 import dsw.core.Config;
-import dsw.model.elements.DiagramDevice;
+import dsw.model.elements.Interclass;
 import dsw.model.elements.RectangleElement;
 
 import java.awt.*;
@@ -9,9 +9,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
-public class RectanglePainter extends DevicePainter{
+public class RectanglePainter extends InterclassPainter {
 
-    public RectanglePainter(DiagramDevice device) {
+    public RectanglePainter(Interclass device) {
 
         super(device);
 

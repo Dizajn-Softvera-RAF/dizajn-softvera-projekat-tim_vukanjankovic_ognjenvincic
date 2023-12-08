@@ -4,7 +4,12 @@ import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.IPublisher;
 import dsw.observer.ISubscriber;
+import dsw.state.concrete.AgregacijaState;
+import dsw.state.concrete.GeneralizacijaState;
+import dsw.state.concrete.KompozicijaState;
+import dsw.state.concrete.ZavisnostState;
 import dsw.view.DiagramView;
+import dsw.view.MainFrame;
 import dsw.view.painters.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,22 +24,22 @@ public class DiagramModel implements IPublisher {
 
     private static int count=0;
     private String name;
-    protected DevicePainter selectionLine;
-    private ArrayList<DevicePainter> selectedElements;
+    protected InterclassPainter selectionLine;
+    private ArrayList<InterclassPainter> selectedElements;
     private double zoom;
     private double transformX;
     private double transformY;
 
-    protected ArrayList<DevicePainter> diagramElements;
-    protected DevicePainter alignmentLineX;
-    protected DevicePainter alignmentLineY;
+    protected ArrayList<InterclassPainter> diagramElements;
+    protected InterclassPainter alignmentLineX;
+    protected InterclassPainter alignmentLineY;
     ArrayList<ISubscriber> subscribers;
 
-    protected DevicePainter tempLine;
+    protected AgregacijaPainter tempLine;
 
     protected ArrayList<ConnectionPainter> veze;
 
-    protected DevicePainter selectionDebug;
+    protected InterclassPainter selectionDebug;
 
     protected Polygon polygon;
 
@@ -53,12 +58,12 @@ public class DiagramModel implements IPublisher {
         diagramElements =new ArrayList<>();
         alignmentLineX = new AlignmentLinePainter(new AlignmentLineElement(new Point(-1,-1), new Dimension(1,1), 1f, Color.PINK, Color.PINK, Color.black));
         alignmentLineY = new AlignmentLinePainter(new AlignmentLineElement(new Point(-1,-1), new Dimension(1,1), 1f, Color.PINK, Color.PINK, Color.black));
-        tempLine = new ConnectionPainter(new Generalizacija(new Point(-1,-1), new Dimension(1,1), 1f, Color.GRAY, Color.GRAY, Color.black, new ConnectionLine(new Point(-1,-1), Color.GRAY, 1f)));
+        tempLine = new AgregacijaPainter(new Agregacija(new Point(-1,-1), new Dimension(1,1), 1f, Color.GRAY, Color.GRAY, Color.black, new ConnectionLine(new Point(-1,-1), Color.GRAY, 1f)));
         veze = new ArrayList<>();
         selectionDebug = new SelectedPainter(new SelectedElement(new Point(5,5), new Dimension(110,100), 1f, new Color(0,0,0,0), Color.RED, Color.black));
         polygon = null;
     }
-    private boolean connectionExists(DevicePainter start, DevicePainter end) {
+    private boolean connectionExists(InterclassPainter start, InterclassPainter end) {
         for (ConnectionPainter veza : veze) {
             if ( ((ConnectionElement)veza.getDevice()).getDevice1() == start && ((ConnectionElement)veza.getDevice()).getDevice2() == end) {
                 return true;
@@ -70,7 +75,7 @@ public class DiagramModel implements IPublisher {
         return false;
     }
 
-    public void deleteElement(DevicePainter device) {
+    public void deleteElement(InterclassPainter device) {
         diagramElements.remove(device);
         for (int i = 0; i < veze.size(); i++) {
             ((ConnectionElement)veze.get(i).getDevice()).getDevice2();
@@ -95,7 +100,18 @@ public class DiagramModel implements IPublisher {
         ce.setStrokeWidth(1f);
 
         if (!connectionExists(ce.getDevice1(), ce.getDevice2())) {
-            veze.add(new ConnectionPainter(ce));
+            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState){
+                veze.add(new AgregacijaPainter(ce));
+            }
+            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
+                veze.add(new KompozicijaPainter(ce));
+            }
+            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
+                veze.add(new GeneralizacijaPainter(ce));
+            }
+            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
+                veze.add(new ZavisnostPainter(ce));
+            }
             notifySubscribers(null);
         }
 
@@ -140,11 +156,11 @@ public class DiagramModel implements IPublisher {
         return diagramElements.size();
     }
 
-    public Iterator<DevicePainter> getDeviceIterator(){
+    public Iterator<InterclassPainter> getDeviceIterator(){
         return diagramElements.iterator();
     }
 
-    public void addDiagramElements(DevicePainter device){
+    public void addDiagramElements(InterclassPainter device){
         if (device.getDevice().getStrokeWidth() == 0) {
             device.getDevice().setStrokeWidth(1f);
         }
@@ -152,7 +168,7 @@ public class DiagramModel implements IPublisher {
         notifySubscribers(null);
     }
 
-    public void importDiagramElements(DevicePainter device){
+    public void importDiagramElements(InterclassPainter device){
         diagramElements.add(device);
         notifySubscribers(null);
     }
@@ -183,12 +199,12 @@ public class DiagramModel implements IPublisher {
 
     public void clearSelecterElements(){
         selectedElements = new ArrayList<>();
-        for (DevicePainter devicePainter : veze) {
+        for (ConnectionPainter devicePainter : veze) {
             devicePainter.getDevice().setSelected(false);
         }
     }
 
-    public void addSelectedElements(DevicePainter device){
+    public void addSelectedElements(InterclassPainter device){
         selectedElements.add(device);
     }
 
@@ -219,7 +235,7 @@ public class DiagramModel implements IPublisher {
 
 
 
-        for(DevicePainter devicePainter : diagramElements){
+        for(InterclassPainter devicePainter : diagramElements){
 
             RectangleElement rectanglePainter = new RectangleElement(
                     new Point(devicePainter.getDevice().getPosition().x, devicePainter.getDevice().getPosition().y),
@@ -238,7 +254,7 @@ public class DiagramModel implements IPublisher {
 
 
 
-        for(DevicePainter devicePainter : veze){
+        for(ConnectionPainter devicePainter : veze){
 
             ConnectionElement connectionElement = new Agregacija(
                     new Point(0, 0),
@@ -251,12 +267,12 @@ public class DiagramModel implements IPublisher {
             );
 
             connectionElement.setStrokeWidth(devicePainter.getDevice().getStrokeWidth());
-            int index1 = diagramElements.indexOf(((ConnectionElement)devicePainter.getDevice()).getDevice1());
-            int index2 = diagramElements.indexOf(((ConnectionElement)devicePainter.getDevice()).getDevice2());
+            int index1 = diagramElements.indexOf((devicePainter.getDevice()).getDevice1());
+            int index2 = diagramElements.indexOf((devicePainter.getDevice()).getDevice2());
             connectionElement.setDevice1(model.getDiagramElements().get(index1));
             connectionElement.setDevice2(model.getDiagramElements().get(index2));
             connectionElement.setSelected(devicePainter.getDevice().isSelected());
-            model.importVeza(new ConnectionPainter(connectionElement));
+            model.importVeza(new AgregacijaPainter(connectionElement));
         }
         for(int i = 0; i<selectedElements.size(); i++){
             int index = diagramElements.indexOf(selectedElements.get(i));

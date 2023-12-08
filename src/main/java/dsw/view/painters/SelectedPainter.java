@@ -1,15 +1,15 @@
 package dsw.view.painters;
 
-import dsw.model.elements.DiagramDevice;
+import dsw.model.elements.Interclass;
 import dsw.model.elements.SelectedElement;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-public class SelectedPainter extends DevicePainter{
+public class SelectedPainter extends InterclassPainter {
 
     private SelectedElement rectangle;
 
-    public SelectedPainter(DiagramDevice d1) {
+    public SelectedPainter(Interclass d1) {
         super(d1);
         rectangle = (SelectedElement) d1;
         updateShape();
