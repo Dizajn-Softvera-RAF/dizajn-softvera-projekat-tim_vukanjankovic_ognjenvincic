@@ -9,25 +9,21 @@ import java.awt.geom.GeneralPath;
 
 public class AgregacijaPainter extends ConnectionPainter {
 
-    public AgregacijaPainter(ConnectionElement device) {
+    public AgregacijaPainter(DiagramElement device) {
         super(device);
         updateShape();
     }
 
     public void updateShape() {
         shape=new GeneralPath();
-        ((GeneralPath)shape).moveTo(device.getPosition().x,device.getPosition().y);
-        ((GeneralPath)shape).lineTo(device.getSize().width, device.getSize().height);
+        ((GeneralPath)shape).moveTo(((ConnectionElement)device).getPosition().x, ((ConnectionElement)device).getPosition().y);
+        ((GeneralPath)shape).lineTo(((ConnectionElement)device).getSize().width, ((ConnectionElement)device).getSize().height);
     }
 
     public void setPosition(Point p1, Point p2) {
-        device.setPosition(p1);
-        device.setSize(new Dimension(p2.x, p2.y));
+        ((ConnectionElement)device).setPosition(p1);
+        ((ConnectionElement)device).setSize(new Dimension(p2.x, p2.y));
         updateShape();
-    }
-    @Override
-    public void paint(Graphics2D g, DiagramElement element) {
-
     }
 
     @Override

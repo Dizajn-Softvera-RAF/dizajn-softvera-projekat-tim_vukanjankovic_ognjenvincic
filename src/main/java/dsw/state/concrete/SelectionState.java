@@ -98,7 +98,7 @@ public class SelectionState extends AbstractState implements State {
             }
             diagram.getModel().clearSelecterElements();
             for (InterclassPainter d : diagram.getModel().getDiagramElements()) {
-                if (isInside((RectanglePainter) d, diagram.getModel())) {
+                if (isInside(d, diagram.getModel())) {
                     diagram.getModel().addSelectedElements(d);
                 }
             }
@@ -120,7 +120,7 @@ public class SelectionState extends AbstractState implements State {
 
             for(InterclassPainter d : diagram.getModel().getDiagramElements()){
 
-                if(isInside((RectanglePainter) d, diagram.getModel())) diagram.getModel().addSelectedElements(d);
+                if(isInside(d, diagram.getModel())) diagram.getModel().addSelectedElements(d);
 
             }
             diagram.getModel().setSelectionLine(new Point(-1, -1), new Dimension(1,1));
@@ -128,7 +128,7 @@ public class SelectionState extends AbstractState implements State {
         }
     }
 
-    public boolean isInside(RectanglePainter d1, DiagramModel diagramModel){
+    public boolean isInside(InterclassPainter d1, DiagramModel diagramModel){
 
         if (Config.SELECTION_TOOL == SelectionTool.RECTANGLE) {
             int x2 = d1.getDevice().getPosition().x;

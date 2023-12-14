@@ -4,9 +4,7 @@ import dsw.core.ApplicationFramework;
 import dsw.core.Config;
 import dsw.core.logger.MessageType;
 import dsw.model.DiagramModel;
-import dsw.model.elements.ConnectionElement;
-import dsw.model.elements.Klasa;
-import dsw.model.elements.RectangleElement;
+import dsw.model.elements.*;
 import dsw.model.helpers.ClickedValue;
 import dsw.model.helpers.Tree;
 import dsw.repository.implementation.Diagram;
@@ -77,16 +75,14 @@ public class KlasaState extends AbstractState implements State {
 
     private Point getAvailableSpot(InterclassPainter e, DiagramModel model) {
         retries++;
-        RectangleElement element = (RectangleElement) e.getDevice();
+        Interclass element = (Interclass) e.getDevice();
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
         int x = (int) (e.getDevice().getPosition().getX()-37);
         int y = (int) (e.getDevice().getPosition().getY()-25);
 
-
         for (InterclassPainter painter : model.getDiagramElements()) {
-
 
         }
 
@@ -109,7 +105,7 @@ public class KlasaState extends AbstractState implements State {
                 return;
             }
         }
-        clicked.getD().getDevice().setPojamShape(Shapes.MAIN);
+        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.MAIN);
 
         bfsOrder(diagram.getModel(), (RectanglePainter) clicked.getD());
 

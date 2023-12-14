@@ -5,6 +5,7 @@ import dsw.core.Config;
 import dsw.core.logger.MessageType;
 import dsw.model.DiagramModel;
 import dsw.model.elements.ConnectionElement;
+import dsw.model.elements.Interclass;
 import dsw.model.elements.Interfejs;
 import dsw.model.elements.RectangleElement;
 import dsw.model.helpers.ClickedValue;
@@ -71,7 +72,7 @@ public class InterfejsState extends AbstractState implements State {
 
     private Point getAvailableSpot(InterclassPainter e, DiagramModel model) {
         retries++;
-        Interfejs interfejs = (Interfejs) e.getDevice();
+        Interclass interfejs = (Interclass) e.getDevice();
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
@@ -91,9 +92,9 @@ public class InterfejsState extends AbstractState implements State {
         ClickedValue clicked = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (clicked == null) return;
         if (clicked.getType() != 0) return;
-        clicked.getD().getDevice().setPojamShape(Shapes.MAIN);
+        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.MAIN);
 
-        bfsOrder(diagram.getModel(),  clicked.getD());
+        bfsOrder(diagram.getModel(),  (RectanglePainter) clicked.getD());
 
         diagram.getModel().notifySubscribers(null);
     }

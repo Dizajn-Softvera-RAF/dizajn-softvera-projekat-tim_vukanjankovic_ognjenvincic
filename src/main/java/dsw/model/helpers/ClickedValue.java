@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClickedValue {
-    InterclassPainter d;
+    ElementPainter d;
     int index;
     int type;
 
-    public ClickedValue(InterclassPainter d, int index, int type) {
+    public ClickedValue(ElementPainter d, int index, int type) {
         this.d = d;
         this.index = index;
         this.type = type;

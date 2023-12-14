@@ -7,10 +7,7 @@ import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.ISubscriber;
 import dsw.repository.implementation.Diagram;
-import dsw.state.concrete.AgregacijaState;
-import dsw.state.concrete.GeneralizacijaState;
-import dsw.state.concrete.KompozicijaState;
-import dsw.state.concrete.ZavisnostState;
+import dsw.state.concrete.*;
 import dsw.view.painters.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +38,6 @@ public class DiagramView extends JPanel implements ISubscriber {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g;
 
         // ZOOM I TRANSLATE
@@ -56,7 +52,7 @@ public class DiagramView extends JPanel implements ISubscriber {
         Iterator<InterclassPainter> it = diagram.getModel().getDeviceIterator();
         int i = 0;
         for (ConnectionPainter ce : diagram.getModel().getVeze()) {
-
+            System.out.println(ce);
             // Dobijanje pocetne i krajnje tacke veze
             InterclassPainter start = (ce.getDevice()).getDevice1();
             InterclassPainter end = (ce.getDevice()).getDevice2();
@@ -65,16 +61,21 @@ public class DiagramView extends JPanel implements ISubscriber {
             ConnectionPainter line = null;
 
             // Pravljenje nove linije na osnovu dobijenih tacaka
-            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState) {
-                 line = new AgregacijaPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
-            }else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
-                 line = new GeneralizacijaPainter(new Generalizacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+//            if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState) {
+            if(ce instanceof AgregacijaPainter){
+                line = new AgregacijaPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
             }
-            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
-                 line = new KompozicijaPainter(new Kompozicija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+//            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
+            else if(ce instanceof GeneralizacijaPainter){
+                line = new GeneralizacijaPainter(new Generalizacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
             }
-            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
-                 line = new ZavisnostPainter(new Zavisnost(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+//            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
+            else if(ce instanceof KompozicijaPainter){
+                line = new KompozicijaPainter(new Kompozicija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
+            }
+//            else if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
+            else if(ce instanceof ZavisnostPainter){
+                line = new ZavisnostPainter(new Zavisnost(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ce.getDevice().getPaint(), ((ConnectionElement) ce.getDevice()).getConnectionLine()));
             }
             line.getDevice().setSelected(ce.getDevice().isSelected());
             (line.getDevice()).setDevice1(start);
@@ -82,7 +83,7 @@ public class DiagramView extends JPanel implements ISubscriber {
             line.getDevice().setStrokeWidth(ce.getDevice().getStrokeWidth());
             diagram.getModel().getVeze().set(i, line);
 
-            // Provera da li je linija selektovana
+//             Provera da li je linija selektovana
             if (diagram.getModel().getVeze().get(i).getDevice().isSelected()) {
                 ConnectionPainter selected = new AgregacijaPainter(new Agregacija(p1, new Dimension(p2.x, p2.y), ce.getDevice().getStrokeWidth() + 2, new Color(0, 0, 0, 0), Color.BLUE, Color.BLUE, new ConnectionLine(new Point(-1, -1), Color.gray, 1f))) {
                 };
@@ -139,6 +140,7 @@ public class DiagramView extends JPanel implements ISubscriber {
         if (diagram.getModel().getTempLine().getDevice().getPosition().getX() > -1 && diagram.getModel().getTempLine().getDevice().getPosition().getY() > -1) {
             ElementPainter painter = diagram.getModel().getTempLine();
             painter.paint(g2, diagram.getModel().getTempLine().getDevice());
+
         }
 
         // Crtanje selekcionog pravougaoinka

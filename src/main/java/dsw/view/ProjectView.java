@@ -7,8 +7,6 @@ import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import lombok.Getter;
 import lombok.Setter;
-import sun.applet.Main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

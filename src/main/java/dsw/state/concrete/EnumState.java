@@ -6,6 +6,7 @@ import dsw.core.logger.MessageType;
 import dsw.model.DiagramModel;
 import dsw.model.elements.ConnectionElement;
 import dsw.model.elements.Enum;
+import dsw.model.elements.Interclass;
 import dsw.model.elements.RectangleElement;
 import dsw.model.helpers.ClickedValue;
 import dsw.model.helpers.Tree;
@@ -43,7 +44,7 @@ public class EnumState extends AbstractState implements State {
         int x, y;
 
         if (clickedValue != null && clickedValue.getType() == 0) {
-            Point spot = getAvailableSpot(((RectanglePainter) clickedValue.getD()), diagram.getModel());
+            Point spot = getAvailableSpot(((InterclassPainter) clickedValue.getD()), diagram.getModel());
 
             if (spot == null) {
 
@@ -78,7 +79,7 @@ public class EnumState extends AbstractState implements State {
 
     private Point getAvailableSpot(InterclassPainter e, DiagramModel model) {
         retries++;
-        RectangleElement element = (RectangleElement) e.getDevice();
+        Interclass element = (Interclass) e.getDevice();
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
@@ -110,7 +111,7 @@ public class EnumState extends AbstractState implements State {
                 return;
             }
         }
-        clicked.getD().getDevice().setPojamShape(Shapes.MAIN);
+        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.MAIN);
 
         bfsOrder(diagram.getModel(), (RectanglePainter) clicked.getD());
 

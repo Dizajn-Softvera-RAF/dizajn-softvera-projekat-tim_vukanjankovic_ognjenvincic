@@ -4,10 +4,7 @@ import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.IPublisher;
 import dsw.observer.ISubscriber;
-import dsw.state.concrete.AgregacijaState;
-import dsw.state.concrete.GeneralizacijaState;
-import dsw.state.concrete.KompozicijaState;
-import dsw.state.concrete.ZavisnostState;
+import dsw.state.concrete.*;
 import dsw.view.DiagramView;
 import dsw.view.MainFrame;
 import dsw.view.painters.*;
@@ -94,23 +91,45 @@ public class DiagramModel implements IPublisher {
 
     public void addConnection(Point p) {
         if (p.getX() == p.getY()) return;
-        ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.black, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
-        ce.setDevice1(diagramElements.get(p.x));
-        ce.setDevice2(diagramElements.get(p.y));
-        ce.setStrokeWidth(1f);
+        //ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.RED, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+//        ce.setDevice1(diagramElements.get(p.x));
+//        ce.setDevice2(diagramElements.get(p.y));
+//        ce.setStrokeWidth(1f);
 
-        if (!connectionExists(ce.getDevice1(), ce.getDevice2())) {
+        System.out.println("dodajemo konekcije");
+        if (!connectionExists(diagramElements.get(p.x), diagramElements.get(p.y))) {
+            System.out.println("Nema konekcije");
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState){
+                ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.BLACK, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ce.setDevice1(diagramElements.get(p.x));
+                ce.setDevice2(diagramElements.get(p.y));
+                ce.setStrokeWidth(1f);
                 veze.add(new AgregacijaPainter(ce));
+                System.out.println("agregacija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
+                ConnectionElement ce = new Kompozicija(new Point(-1,-1), new Dimension(1,1), 10f, Color.BLUE, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ce.setDevice1(diagramElements.get(p.x));
+                ce.setDevice2(diagramElements.get(p.y));
+                ce.setStrokeWidth(1f);
                 veze.add(new KompozicijaPainter(ce));
+                System.out.println("Kompozicija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
+                ConnectionElement ce = new Generalizacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.RED, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ce.setDevice1(diagramElements.get(p.x));
+                ce.setDevice2(diagramElements.get(p.y));
+                ce.setStrokeWidth(1f);
                 veze.add(new GeneralizacijaPainter(ce));
+                System.out.println("Generalizacija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
+                ConnectionElement ce = new Zavisnost(new Point(-1,-1), new Dimension(1,1), 10f, Color.YELLOW, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ce.setDevice1(diagramElements.get(p.x));
+                ce.setDevice2(diagramElements.get(p.y));
+                ce.setStrokeWidth(1f);
                 veze.add(new ZavisnostPainter(ce));
+                System.out.println("Zavistnost konekcija");
             }
             notifySubscribers(null);
         }

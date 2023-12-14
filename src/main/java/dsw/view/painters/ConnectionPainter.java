@@ -10,13 +10,23 @@ import java.awt.geom.GeneralPath;
 
 public abstract class ConnectionPainter extends ElementPainter{
 
-    protected Shape shape;
     @Getter
     @Setter
-    protected ConnectionElement device;
+    protected Shape shape;
+//    protected ConnectionElement device;
     public ConnectionPainter(DiagramElement device) {
         super(device);
         updateShape();
+    }
+
+    public ConnectionElement getDevice()
+    {
+        return (ConnectionElement) device;
+    }
+
+    public void setDevice(ConnectionElement device)
+    {
+        this.device = device;
     }
 
     public void updateShape() {
@@ -25,11 +35,23 @@ public abstract class ConnectionPainter extends ElementPainter{
     public void setPosition(Point p1, Point p2) {
     }
 
+    public void paint(Graphics2D g, DiagramElement element) {
+        device = element;
+
+        g.setPaint(element.getBorderPaint());
+        g.setStroke(element.getStroke());
+
+        g.draw(getShape());
+        g.setPaint(element.getPaint());
+
+        g.fill(getShape());
+    }
+
     public Point getPoint1() {
-        return device.getPosition();
+        return ((ConnectionElement)device).getPosition();
     }
     public Point getPoint2() {
-        return new Point(device.getSize().width, device.getSize().height);
+        return new Point(((ConnectionElement)device).getSize().width, ((ConnectionElement)device).getSize().height);
     }
 }
 

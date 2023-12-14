@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 
 public class InterclassPainter extends ElementPainter {
     protected Shape shape;
@@ -24,18 +27,18 @@ public class InterclassPainter extends ElementPainter {
 
     public void paint(Graphics2D g, DiagramElement element){
         device = (Interclass)element;
-        if (this instanceof RectanglePainter) {
+        if (!(this instanceof SelectedPainter)) {
 
             g.setFont(new Font("Verdana", Font.PLAIN, 12));
-            if (((RectangleElement) element).getPojamShape() == Shapes.MAIN) {
+            if (((Interclass) element).getPojamShape() == Shapes.MAIN) {
                 g.setFont(new Font("Verdana", Font.BOLD, 16));
             }
-            ((RectanglePainter) this).resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
+            ((InterclassPainter) this).resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
 
 
             DiagramView dv = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
             for (int i = 0; i < dv.getDiagram().getModel().getDiagramElements().size(); i++) {
-                RectanglePainter rp = (RectanglePainter) dv.getDiagram().getModel().getDiagramElements().get(i);
+                InterclassPainter rp = (InterclassPainter) dv.getDiagram().getModel().getDiagramElements().get(i);
                 if (rp.getDevice().equals(element)) {
 
                     rp.resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
@@ -49,7 +52,7 @@ public class InterclassPainter extends ElementPainter {
         g.setPaint(element.getBorderPaint());
         g.setStroke(element.getStroke());
 
-        if (element instanceof RectangleElement) {
+        if (!(this instanceof SelectedPainter)) {
             g.setStroke(new BasicStroke(element.getStrokeWidth()));
         }
 
@@ -60,14 +63,14 @@ public class InterclassPainter extends ElementPainter {
                     0, new float[]{2}, 0));
         }
 
-
-
+//        Interclass rectangle =  device;
+//        shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
         g.draw(getShape());
         g.setPaint(element.getPaint());
 
         g.fill(getShape());
 
-        if (element instanceof RectangleElement){
+        if (!(this instanceof SelectedPainter)){
             g.setPaint(Color.BLACK);
 
             int x = (int)device.getPosition().getX();
@@ -82,6 +85,25 @@ public class InterclassPainter extends ElementPainter {
 
     }
 
+    private void updateShape(){
+        Interclass rectangle = (Interclass) device;
+        shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
+//        if (rectangle.getPojamShape() == Shapes.MAIN) {
+//            shape = new Ellipse2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
+//        }
+//        if (rectangle.getPojamShape() == Shapes.ELLIPSE) {
+//            shape = new Ellipse2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
+//        } else if (rectangle.getPojamShape() == Shapes.RECTANGLE) {
+//            shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
+//        } else if (rectangle.getPojamShape() == Shapes.ROUNDED_RECTANGLE) {
+//            shape = new RoundRectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height,20,20);
+//        }
+    }
+
+    public void resize(Dimension size){
+        device.setSize(size);
+        updateShape();
+    }
     public boolean elementAt(Point pos){
         return getShape().contains(pos);
     }

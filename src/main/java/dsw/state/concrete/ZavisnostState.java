@@ -9,7 +9,7 @@ import dsw.state.State;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class ZavisnostState extends AbstractState implements State{
+public class ZavisnostState extends ConnectionState implements State{
     Point startPoint = new Point();
 
     @Override
