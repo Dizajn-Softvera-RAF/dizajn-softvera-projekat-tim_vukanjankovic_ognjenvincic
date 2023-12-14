@@ -7,6 +7,7 @@ import dsw.state.AbstractState;
 import dsw.state.State;
 import dsw.view.DiagramView;
 import dsw.view.MainFrame;
+import dsw.view.painters.ElementPainter;
 import dsw.view.painters.InterclassPainter;
 
 import java.awt.*;
@@ -111,9 +112,10 @@ public class MoveState extends AbstractState implements State {
 
             int offsetX = (int) -(startPoint.x - point.getX());
             int offsetY = (int) -(startPoint.y - point.getY());
-            for (InterclassPainter d : diagram.getModel().getSelectedElements()) {
-
-                d.getDevice().setPosition(new Point(d.getDevice().getPosition().x + offsetX, d.getDevice().getPosition().y + offsetY));
+            for (ElementPainter d : diagram.getModel().getSelectedElements()) {
+                if(d.getDevice() instanceof Interclass){
+                    ((Interclass)d.getDevice()).setPosition(new Point(((Interclass) d.getDevice()).getPosition().x + offsetX, ((Interclass) d.getDevice()).getPosition().y + offsetY));
+                }
             }
             startPoint = diagramPoint(e.getPoint(), diagram.getModel());
 

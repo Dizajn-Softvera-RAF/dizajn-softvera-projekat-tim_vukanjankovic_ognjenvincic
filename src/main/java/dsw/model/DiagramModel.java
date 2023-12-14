@@ -1,5 +1,6 @@
 package dsw.model;
 
+import dsw.core.ApplicationFramework;
 import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.IPublisher;
@@ -22,7 +23,7 @@ public class DiagramModel implements IPublisher {
     private static int count=0;
     private String name;
     protected InterclassPainter selectionLine;
-    private ArrayList<InterclassPainter> selectedElements;
+    private ArrayList<ElementPainter> selectedElements;
     private double zoom;
     private double transformX;
     private double transformY;
@@ -75,8 +76,8 @@ public class DiagramModel implements IPublisher {
     public void deleteElement(InterclassPainter device) {
         diagramElements.remove(device);
         for (int i = 0; i < veze.size(); i++) {
-            ((ConnectionElement)veze.get(i).getDevice()).getDevice2();
-            if (((ConnectionElement)veze.get(i).getDevice()).getDevice2().equals(device) || ((ConnectionElement)veze.get(i).getDevice()).getDevice1().equals(device)) {
+            (veze.get(i).getDevice()).getDevice2();
+            if ((veze.get(i).getDevice()).getDevice2().equals(device) || ((ConnectionElement)veze.get(i).getDevice()).getDevice1().equals(device)) {
                 veze.remove(i);
                 i--;
             }
@@ -84,28 +85,21 @@ public class DiagramModel implements IPublisher {
         notifySubscribers(null);
     }
 
-    public void deleteConnection(ConnectionElement connectionElement) {
-        veze.remove(connectionElement);
+    public void deleteConnection(ConnectionPainter connectionPainter) {
+        veze.remove(connectionPainter);
         notifySubscribers(null);
     }
 
     public void addConnection(Point p) {
         if (p.getX() == p.getY()) return;
-        //ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.RED, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
-//        ce.setDevice1(diagramElements.get(p.x));
-//        ce.setDevice2(diagramElements.get(p.y));
-//        ce.setStrokeWidth(1f);
 
-        System.out.println("dodajemo konekcije");
         if (!connectionExists(diagramElements.get(p.x), diagramElements.get(p.y))) {
-            System.out.println("Nema konekcije");
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof AgregacijaState){
                 ConnectionElement ce = new Agregacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.BLACK, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
                 ce.setDevice1(diagramElements.get(p.x));
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new AgregacijaPainter(ce));
-                System.out.println("agregacija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
                 ConnectionElement ce = new Kompozicija(new Point(-1,-1), new Dimension(1,1), 10f, Color.BLUE, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
@@ -113,7 +107,6 @@ public class DiagramModel implements IPublisher {
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new KompozicijaPainter(ce));
-                System.out.println("Kompozicija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
                 ConnectionElement ce = new Generalizacija(new Point(-1,-1), new Dimension(1,1), 10f, Color.RED, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
@@ -121,7 +114,6 @@ public class DiagramModel implements IPublisher {
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new GeneralizacijaPainter(ce));
-                System.out.println("Generalizacija konekcija");
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
                 ConnectionElement ce = new Zavisnost(new Point(-1,-1), new Dimension(1,1), 10f, Color.YELLOW, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
@@ -129,7 +121,6 @@ public class DiagramModel implements IPublisher {
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new ZavisnostPainter(ce));
-                System.out.println("Zavistnost konekcija");
             }
             notifySubscribers(null);
         }
@@ -223,7 +214,7 @@ public class DiagramModel implements IPublisher {
         }
     }
 
-    public void addSelectedElements(InterclassPainter device){
+    public void addSelectedElements(ElementPainter device){
         selectedElements.add(device);
     }
 

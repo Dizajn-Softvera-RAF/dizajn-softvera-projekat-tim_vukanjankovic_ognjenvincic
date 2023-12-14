@@ -123,18 +123,18 @@ public class DiagramView extends JPanel implements ISubscriber {
             d.paint(g2, d.getDevice());
 
         }
-
-        // Crtanje snapping linije X
-        if (diagram.getModel().getAlignmentLineX().getDevice().getPosition().getX() != -1 || diagram.getModel().getAlignmentLineX().getDevice().getPosition().getY() != -1) {
-            ElementPainter painter = diagram.getModel().getAlignmentLineX();
-            painter.paint(g2, diagram.getModel().getAlignmentLineX().getDevice());
-        }
-
-        // Crtanje snapping linije Y
-        if (diagram.getModel().getAlignmentLineY().getDevice().getPosition().getX() != -1 || diagram.getModel().getAlignmentLineY().getDevice().getPosition().getY() != -1) {
-            ElementPainter painter = diagram.getModel().getAlignmentLineY();
-            painter.paint(g2, diagram.getModel().getAlignmentLineY().getDevice());
-        }
+//
+//        // Crtanje snapping linije X
+//        if (diagram.getModel().getAlignmentLineX().getDevice().getPosition().getX() != -1 || diagram.getModel().getAlignmentLineX().getDevice().getPosition().getY() != -1) {
+//            ElementPainter painter = diagram.getModel().getAlignmentLineX();
+//            painter.paint(g2, diagram.getModel().getAlignmentLineX().getDevice());
+//        }
+//
+//        // Crtanje snapping linije Y
+//        if (diagram.getModel().getAlignmentLineY().getDevice().getPosition().getX() != -1 || diagram.getModel().getAlignmentLineY().getDevice().getPosition().getY() != -1) {
+//            ElementPainter painter = diagram.getModel().getAlignmentLineY();
+//            painter.paint(g2, diagram.getModel().getAlignmentLineY().getDevice());
+//        }
 
         // Crtanje veze koja se trenutno kreira
         if (diagram.getModel().getTempLine().getDevice().getPosition().getX() > -1 && diagram.getModel().getTempLine().getDevice().getPosition().getY() > -1) {

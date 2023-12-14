@@ -37,7 +37,7 @@ public class DeletePainterAction extends AbstractClassyAction{
         }
         for (int i = 0; i < dv.getDiagram().getModel().getVeze().size(); i++) {
             if (dv.getDiagram().getModel().getVeze().get(i).getDevice().isSelected()) {
-                dv.getDiagram().getModel().deleteConnection((ConnectionElement) dv.getDiagram().getModel().getVeze().get(i).getDevice());
+                dv.getDiagram().getModel().deleteConnection(dv.getDiagram().getModel().getVeze().get(i));
                 i--;
             }
         }

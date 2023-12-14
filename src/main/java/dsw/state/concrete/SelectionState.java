@@ -9,6 +9,7 @@ import dsw.model.helpers.SelectionTool;
 import dsw.repository.implementation.Diagram;
 import dsw.state.AbstractState;
 import dsw.state.State;
+import dsw.view.painters.ConnectionPainter;
 import dsw.view.painters.InterclassPainter;
 import dsw.view.painters.RectanglePainter;
 
@@ -28,7 +29,7 @@ public class SelectionState extends AbstractState implements State {
         }
 
         ClickedValue clicked = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
-        if (clicked != null) {
+        if (clicked != null && clicked.getD() instanceof InterclassPainter) {
             InterclassPainter device = (InterclassPainter) clicked.getD();
             int index = clicked.getIndex();
             if (clicked.getType() == 0) {
@@ -45,9 +46,24 @@ public class SelectionState extends AbstractState implements State {
             }
 
             diagram.getModel().notifySubscribers(null);
+        }else if(clicked != null && clicked.getD() instanceof ConnectionPainter){
+            ConnectionPainter device = (ConnectionPainter) clicked.getD();
+            int index = clicked.getIndex();
+            if (clicked.getType() == 0) {
+                if (diagram.getModel().getSelectedElements().contains(device)) {
+                    diagram.getModel().getSelectedElements().remove(device);
+                } else {
+                    diagram.getModel().addSelectedElements(device);
+                }
+                ConnectionPainter temp = diagram.getModel().getVeze().get(diagram.getModel().getDiagramElements().size()-1);
+                diagram.getModel().getVeze().set(diagram.getModel().getDiagramElements().size()-1, device);
+                diagram.getModel().getVeze().set(index, temp);
+            } else {
+                diagram.getModel().getVeze().get(index).getDevice().setSelected( !diagram.getModel().getVeze().get(index).getDevice().isSelected() );
+            }
+
+            diagram.getModel().notifySubscribers(null);
         }
-
-
         if (Config.SELECTION_TOOL == SelectionTool.POLYGON) {
             Point p = diagramPoint(e.getPoint(), diagram.getModel());
 
