@@ -1,6 +1,7 @@
 package dsw.model.elements;
 
 import dsw.model.helpers.ConnectionLine;
+import dsw.repository.composite.ClassyNode;
 import dsw.view.painters.InterclassPainter;
 
 import java.awt.*;
@@ -16,8 +17,8 @@ public abstract class ConnectionElement extends DiagramElement{
     private boolean selected;
 
 
-    public ConnectionElement(Point position, Dimension size, float stroke , Paint paint, Paint borderPaint, Paint TextPaint, ConnectionLine connectionLine) {
-        super(stroke, paint, borderPaint, TextPaint);
+    public ConnectionElement(Point position, Dimension size, String name, ClassyNode parent, float stroke , Paint paint, Paint borderPaint, Paint TextPaint, ConnectionLine connectionLine) {
+        super(name, parent, stroke, paint, borderPaint, TextPaint);
         this.connectionLine = connectionLine;
         this.position = position;
         this.size = size;

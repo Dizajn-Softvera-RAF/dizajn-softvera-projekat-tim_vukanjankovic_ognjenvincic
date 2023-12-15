@@ -4,6 +4,8 @@ import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.controller.tree.view.ClassyTreeView;
 import dsw.core.ApplicationFramework;
 import dsw.core.logger.MessageType;
+import dsw.model.elements.*;
+import dsw.model.elements.Enum;
 import dsw.observer.ISubscriber;
 import dsw.repository.composite.ClassyNode;
 import dsw.repository.composite.ClassyNodeComposite;
@@ -71,6 +73,7 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
             node = nodeGenerator.generateNode(NodeType.Diagram, parent);
         }
 
+
     }
 
     @Override
@@ -102,6 +105,48 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
 
         else if (parent.getClassyNode() instanceof Package) {
             Project p = (Project) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Klasa) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Interfejs) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Enum) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Agregacija) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Generalizacija) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Kompozicija) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
+            if (!p.getChildren().contains(parent.getClassyNode())) {
+                ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
+            }
+            node = nodeGenerator.generateNode(child, parent);
+        }else if (parent.getClassyNode() instanceof Zavisnost) {
+            Diagram p = (Diagram) parent.getClassyNode().getParent();
             if (!p.getChildren().contains(parent.getClassyNode())) {
                 ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
             }
@@ -140,6 +185,45 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
             treeView.expandPath(treeView.getSelectionPath());
             SwingUtilities.updateComponentTreeUI(treeView);
         }
+        if (parent.getClassyNode() instanceof Klasa) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+        if (parent.getClassyNode() instanceof Interfejs) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }if (parent.getClassyNode() instanceof Enum) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }if (parent.getClassyNode() instanceof Agregacija) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }if (parent.getClassyNode() instanceof Kompozicija) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }if (parent.getClassyNode() instanceof Zavisnost) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }if (parent.getClassyNode() instanceof Generalizacija) {
+            parent.removeFromParent();
+            ((ClassyNodeComposite) parent.getClassyNode().getParent()).deleteChild(parent.getClassyNode());
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+
+
     }
 
     @Override
@@ -235,5 +319,91 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
             treeView.expandPath(treeView.getSelectionPath());
             SwingUtilities.updateComponentTreeUI(treeView);
         }
+        else if (notification instanceof Klasa) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Interfejs) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Enum) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Agregacija) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Generalizacija) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Kompozicija) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }else if (notification instanceof Zavisnost) {
+
+            ClassyNode node = (ClassyNode) notification;
+
+            if (selected == null) {
+                selected = node.getClassyTreeItem();
+            }
+
+            selected.add(new ClassyTreeItem(node));
+            ((ClassyNodeComposite) selected.getClassyNode()).addChild(node);
+            treeView.expandPath(treeView.getSelectionPath());
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+
     }
 }

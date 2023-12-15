@@ -1,6 +1,7 @@
 package dsw.view;
 
 import dsw.observer.ISubscriber;
+import dsw.repository.implementation.Diagram;
 import dsw.state.StateManager;
 import dsw.view.components.TabbedPane;
 import dsw.repository.implementation.Package;
@@ -18,6 +19,7 @@ public class ProjectView extends JPanel implements ISubscriber {
     private JLabel imeProjekta, autor;
     private Project project;
     private Package pckg;
+    private Diagram diagram;
     private StateManager stateManager;
     private TabbedPane tabbedPane;
 
@@ -76,6 +78,11 @@ public class ProjectView extends JPanel implements ISubscriber {
             Package p = (Package) notification;
             pckg = p;
             tabbedPane.setTabs(p.getChildren());
+        }
+        else if(notification instanceof Diagram){
+            Diagram d = (Diagram) notification;
+            diagram = d;
+            tabbedPane.setTabs(pckg.getChildren());
         }
     }
 

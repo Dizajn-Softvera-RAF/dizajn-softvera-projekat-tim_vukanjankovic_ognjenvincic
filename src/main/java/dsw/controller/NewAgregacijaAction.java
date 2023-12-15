@@ -1,6 +1,12 @@
 package dsw.controller;
 
+import dsw.controller.tree.model.ClassyTreeItem;
+import dsw.core.ApplicationFramework;
 import dsw.core.Utils;
+import dsw.core.logger.MessageType;
+import dsw.repository.implementation.Diagram;
+import dsw.repository.implementation.NodeType;
+import dsw.repository.implementation.ProjectExplorer;
 import dsw.view.MainFrame;
 
 import javax.swing.*;

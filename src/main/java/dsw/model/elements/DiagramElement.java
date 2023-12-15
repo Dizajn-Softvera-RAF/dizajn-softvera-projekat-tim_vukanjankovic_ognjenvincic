@@ -1,11 +1,12 @@
 package dsw.model.elements;
 
+import dsw.repository.composite.ClassyNode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
 
-public abstract class DiagramElement {
+public abstract class DiagramElement extends ClassyNode {
     protected Paint paint;
     protected Paint borderPaint;
     protected Stroke stroke;
@@ -16,7 +17,8 @@ public abstract class DiagramElement {
     @Setter
     protected float strokeWidth;
 
-    public DiagramElement(float stroke, Paint paint, Paint borderPaint, Paint TextPaint) {
+    public DiagramElement(String name, ClassyNode parent, float stroke, Paint paint, Paint borderPaint, Paint TextPaint) {
+        super(name, parent);
         this.stroke = new BasicStroke(stroke);
         this.paint = paint;
         this.borderPaint = borderPaint;

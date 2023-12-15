@@ -62,10 +62,10 @@ public class KlasaState extends AbstractState implements State {
 
         if (Config.SHAPE == Shapes.MAIN) {
             rectangle=new Klasa(new Point(view.getSize().width / 2, view.getSize().height / 2), new Dimension(74,60),
-                    2f, new Color(121, 207, 246), Color.black, Color.black);
+                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black);
         } else {
             rectangle=new Klasa(new Point(x, y), new Dimension(74,50),
-                    2f, new Color(121, 207, 246), Color.black, Color.black);
+                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black);
         }
 
         rectangle.setName(name);

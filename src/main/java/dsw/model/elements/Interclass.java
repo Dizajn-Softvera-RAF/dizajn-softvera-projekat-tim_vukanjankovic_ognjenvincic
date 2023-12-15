@@ -1,5 +1,6 @@
 package dsw.model.elements;
 
+import dsw.repository.composite.ClassyNode;
 import dsw.view.painters.Shapes;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,9 @@ public abstract class Interclass extends DiagramElement {
     @Setter
     protected Shapes pojamShape;
 
-    protected Interclass(Point position, Dimension size, float stroke, Paint paint, Paint borderPaint, Paint textPaint) {
-        super(stroke, paint, borderPaint, textPaint);
+
+    protected Interclass(Point position, Dimension size, String name, ClassyNode parent,float stroke, Paint paint, Paint borderPaint, Paint textPaint) {
+        super(name, parent, stroke, paint, borderPaint, textPaint);
         this.size = size;
         this.position = position;
         this.selected = false;

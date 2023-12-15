@@ -2,6 +2,6 @@ package dsw.repository.implementation;
 
 public enum NodeType {
 
-    ProjectExplorer, Project, Diagram, Package
+    ProjectExplorer, Project, Diagram, Package, Agregacija
 
 }

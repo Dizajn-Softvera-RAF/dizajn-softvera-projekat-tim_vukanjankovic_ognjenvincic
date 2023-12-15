@@ -1,6 +1,8 @@
 package dsw.controller.tree.view;
 
 import dsw.controller.tree.model.ClassyTreeItem;
+import dsw.model.elements.*;
+import dsw.model.elements.Enum;
 import dsw.repository.implementation.Diagram;
 import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
@@ -30,6 +32,22 @@ public class ClassyTreeCellRenderer extends DefaultTreeCellRenderer {
         }
 
         else if (((ClassyTreeItem)value).getClassyNode() instanceof Package) {
+            imageURL = getClass().getResource("/images/package.png");
+        }
+        else if (((ClassyTreeItem)value).getClassyNode() instanceof Klasa) {
+            imageURL = getClass().getResource("/images/package.png");
+        }
+        else if (((ClassyTreeItem)value).getClassyNode() instanceof Interfejs) {
+            imageURL = getClass().getResource("/images/package.png");
+        }else if (((ClassyTreeItem)value).getClassyNode() instanceof Enum) {
+            imageURL = getClass().getResource("/images/package.png");
+        }else if (((ClassyTreeItem)value).getClassyNode() instanceof Agregacija) {
+            imageURL = getClass().getResource("/images/package.png");
+        }else if (((ClassyTreeItem)value).getClassyNode() instanceof Kompozicija) {
+            imageURL = getClass().getResource("/images/package.png");
+        }else if (((ClassyTreeItem)value).getClassyNode() instanceof Generalizacija) {
+            imageURL = getClass().getResource("/images/package.png");
+        }else if (((ClassyTreeItem)value).getClassyNode() instanceof Zavisnost) {
             imageURL = getClass().getResource("/images/package.png");
         }
 

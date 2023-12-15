@@ -25,7 +25,6 @@ public class KompozicijaState extends ConnectionState implements State {
     @Override
     public void mouseReleased(MouseEvent e, Diagram diagram) {
         clearSelection(diagram);
-        DiagramModel oldModel = diagram.getModel().getClone();
         ClickedValue start = getClickedIndex(startPoint, diagram);
         ClickedValue end = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (start == null || end == null) {
