@@ -12,35 +12,48 @@ public class KompozicijaPainter extends ConnectionPainter{
             updateShape();
         }
 
-        @Override
-        public void updateShape() {
-            shape=new GeneralPath();
-            ((GeneralPath)shape).moveTo(((ConnectionElement)device).getPosition().x, ((ConnectionElement)device).getPosition().y);
-            ((GeneralPath)shape).lineTo(((ConnectionElement)device).getSize().width, ((ConnectionElement)device).getSize().height);
+    @Override
+    public void updateShape() {
+        Point p1 = getPoint1(); // Centar početnog elementa
+        Point p2 = getPoint2(); // Centar krajnjeg elementa
 
-//            super.updateShape(); // Let the superclass handle the basic shape setup
-//
-//            // Calculate positions for the composition arrow or shape
-//            Point p1 = getPoint1();
-//            Point p2 = getPoint2();
-//
-//            if (p1 != null && p2 != null) {
-//                int diamondSize = 8; // Size of the diamond shape for composition
-//
-//                // Update the shape to include the composition diamond
-//                if (shape == null) {
-//                    shape = new GeneralPath(); // Initialize the shape if it's null
-//                } else {
-//                    ((GeneralPath) shape).reset(); // Reset the shape if it's already defined
-//                }
-//
-//                ((GeneralPath) shape).moveTo(p2.x, p2.y);
-//                ((GeneralPath) shape).lineTo(p2.x - diamondSize, p2.y - diamondSize);
-//                ((GeneralPath) shape).lineTo(p2.x, p2.y - (2 * diamondSize));
-//                ((GeneralPath) shape).lineTo(p2.x + diamondSize, p2.y - diamondSize);
-//                ((GeneralPath) shape).closePath();
-//            }
+        if (p1 != null && p2 != null) {
+            shape = new GeneralPath();
+
+            double angle = Math.atan2(p2.y - p1.y, p2.x - p1.x); // Ugao linije
+
+            // Veličina romba
+            int diamondSize = 10;
+
+            // Pomeraj unazad duž linije
+            double backwardShift = diamondSize / Math.sqrt(2); // Polovina dužine dijagonale romba
+
+            // Novi p2 koji je pomeren unazad
+            int p2xShifted = p2.x - (int) (backwardShift * Math.cos(angle));
+            int p2yShifted = p2.y - (int) (backwardShift * Math.sin(angle));
+
+            // Izračunavanje tačaka za romb
+            int xLeft = p2xShifted - (int) (diamondSize * Math.cos(angle + Math.PI / 2));
+            int yLeft = p2yShifted - (int) (diamondSize * Math.sin(angle + Math.PI / 2));
+            int xRight = p2xShifted - (int) (diamondSize * Math.cos(angle - Math.PI / 2));
+            int yRight = p2yShifted - (int) (diamondSize * Math.sin(angle - Math.PI / 2));
+            int xTop = p2xShifted - (int) (diamondSize * Math.cos(angle));
+            int yTop = p2yShifted - (int) (diamondSize * Math.sin(angle));
+            int xBottom = p2xShifted + (int) (diamondSize * Math.cos(angle));
+            int yBottom = p2yShifted + (int) (diamondSize * Math.sin(angle));
+
+            // Crtanje linije do vrha romba
+            ((GeneralPath) shape).moveTo(p1.x, p1.y);
+            ((GeneralPath) shape).lineTo(xTop, yTop);
+
+            // Crtanje romba kao poligona
+            ((GeneralPath) shape).moveTo(xTop, yTop);
+            ((GeneralPath) shape).lineTo(xLeft, yLeft);
+            ((GeneralPath) shape).lineTo(xBottom, yBottom);
+            ((GeneralPath) shape).lineTo(xRight, yRight);
+            ((GeneralPath) shape).closePath();
         }
+    }
 
     @Override
     public boolean elementAt(Point pos) {

@@ -2,16 +2,13 @@ package dsw.view.painters;
 
 import dsw.model.elements.Interclass;
 import dsw.model.elements.DiagramElement;
-import dsw.model.elements.RectangleElement;
 import dsw.view.DiagramView;
 import dsw.view.MainFrame;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
 
 public class InterclassPainter extends ElementPainter {
     protected Shape shape;
@@ -25,7 +22,7 @@ public class InterclassPainter extends ElementPainter {
         this.device = device;
     }
 
-    public void paint(Graphics2D g, DiagramElement element){
+    public void paint(Graphics2D g, DiagramElement element, boolean shouldFill){
         device = (Interclass)element;
         if (!(this instanceof SelectedPainter)) {
 
@@ -33,12 +30,12 @@ public class InterclassPainter extends ElementPainter {
             if (((Interclass) element).getPojamShape() == Shapes.MAIN) {
                 g.setFont(new Font("Verdana", Font.BOLD, 16));
             }
-            ((InterclassPainter) this).resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
+            (this).resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
 
 
             DiagramView dv = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
             for (int i = 0; i < dv.getDiagram().getModel().getDiagramElements().size(); i++) {
-                InterclassPainter rp = (InterclassPainter) dv.getDiagram().getModel().getDiagramElements().get(i);
+                InterclassPainter rp = dv.getDiagram().getModel().getDiagramElements().get(i);
                 if (rp.getDevice().equals(element)) {
 
                     rp.resize(new Dimension(g.getFontMetrics().stringWidth(element.getName())+40, 50));
@@ -47,7 +44,6 @@ public class InterclassPainter extends ElementPainter {
                 }
             }
         }
-
 
         g.setPaint(element.getBorderPaint());
         g.setStroke(element.getStroke());
@@ -63,8 +59,6 @@ public class InterclassPainter extends ElementPainter {
                     0, new float[]{2}, 0));
         }
 
-//        Interclass rectangle =  device;
-//        shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
         g.draw(getShape());
         g.setPaint(element.getPaint());
 
@@ -88,16 +82,7 @@ public class InterclassPainter extends ElementPainter {
     private void updateShape(){
         Interclass rectangle = (Interclass) device;
         shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
-//        if (rectangle.getPojamShape() == Shapes.MAIN) {
-//            shape = new Ellipse2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
-//        }
-//        if (rectangle.getPojamShape() == Shapes.ELLIPSE) {
-//            shape = new Ellipse2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
-//        } else if (rectangle.getPojamShape() == Shapes.RECTANGLE) {
-//            shape = new Rectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height);
-//        } else if (rectangle.getPojamShape() == Shapes.ROUNDED_RECTANGLE) {
-//            shape = new RoundRectangle2D.Float(rectangle.getPosition().x-rectangle.getSize().width/2, rectangle.getPosition().y-rectangle.getSize().height/2, rectangle.getSize().width, rectangle.getSize().height,20,20);
-//        }
+
     }
 
     public void resize(Dimension size){

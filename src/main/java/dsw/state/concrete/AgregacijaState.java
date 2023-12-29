@@ -1,5 +1,8 @@
 package dsw.state.concrete;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.GuiCommand;
+import dsw.core.ApplicationFramework;
 import dsw.model.DiagramModel;
 import dsw.model.helpers.ClickedValue;
 import dsw.repository.implementation.Diagram;
@@ -9,7 +12,7 @@ import dsw.state.State;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class AgregacijaState extends ConnectionState implements State {
+public class AgregacijaState extends AbstractState implements State {
     Point startPoint = new Point();
 
     @Override
@@ -25,6 +28,7 @@ public class AgregacijaState extends ConnectionState implements State {
     @Override
     public void mouseReleased(MouseEvent e, Diagram diagram) {
         clearSelection(diagram);
+        DiagramModel oldModel = diagram.getModel().getClone();
         ClickedValue start = getClickedIndex(startPoint, diagram);
         ClickedValue end = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (start == null || end == null) {
@@ -36,5 +40,8 @@ public class AgregacijaState extends ConnectionState implements State {
         diagram.getModel().addConnection(new Point(start.getIndex(), end.getIndex()));
 
         clearLine(diagram);
+        AbstractCommand command = new GuiCommand(oldModel, diagram.getModel().getClone(), diagram);
+        ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
+
     }
 }

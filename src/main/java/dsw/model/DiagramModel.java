@@ -1,6 +1,7 @@
 package dsw.model;
 
 import dsw.core.ApplicationFramework;
+import dsw.core.Config;
 import dsw.model.elements.*;
 import dsw.model.helpers.ConnectionLine;
 import dsw.observer.IPublisher;
@@ -27,7 +28,6 @@ public class DiagramModel implements IPublisher {
     private double zoom;
     private double transformX;
     private double transformY;
-
     protected ArrayList<InterclassPainter> diagramElements;
     protected InterclassPainter alignmentLineX;
     protected InterclassPainter alignmentLineY;
@@ -41,7 +41,7 @@ public class DiagramModel implements IPublisher {
 
     protected Polygon polygon;
 
-    protected RectanglePainter tempRectangle;
+    protected InterclassPainter tempRectangle;
 
     public DiagramModel() {
         init();
@@ -102,21 +102,21 @@ public class DiagramModel implements IPublisher {
                 veze.add(new AgregacijaPainter(ce));
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof KompozicijaState){
-                ConnectionElement ce = new Kompozicija(new Point(-1,-1), new Dimension(1,1), "Kompozicija", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.BLUE, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ConnectionElement ce = new Kompozicija(new Point(-1,-1), new Dimension(1,1), "Kompozicija", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.BLACK, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
                 ce.setDevice1(diagramElements.get(p.x));
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new KompozicijaPainter(ce));
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof GeneralizacijaState){
-                ConnectionElement ce = new Generalizacija(new Point(-1,-1), new Dimension(1,1), "Generalizacija", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.RED, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ConnectionElement ce = new Generalizacija(new Point(-1,-1), new Dimension(1,1), "Generalizacija", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.BLACK, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
                 ce.setDevice1(diagramElements.get(p.x));
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
                 veze.add(new GeneralizacijaPainter(ce));
             }
             if(MainFrame.getInstance().getProjectView().getStateManager().getCurrentState() instanceof ZavisnostState){
-                ConnectionElement ce = new Zavisnost(new Point(-1,-1), new Dimension(1,1), "Zavisnost", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.YELLOW, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
+                ConnectionElement ce = new Zavisnost(new Point(-1,-1), new Dimension(1,1), "Zavisnost", MainFrame.getInstance().getProjectView().getDiagram(),10f, Color.BLACK, Color.black, Color.black, new ConnectionLine(p, Color.GRAY, 1f));
                 ce.setDevice1(diagramElements.get(p.x));
                 ce.setDevice2(diagramElements.get(p.y));
                 ce.setStrokeWidth(1f);
@@ -239,65 +239,114 @@ public class DiagramModel implements IPublisher {
         }
     }
 
-//    public DiagramModel getClone(){
-//
-//        DiagramModel model = new DiagramModel();
-//
-//
-//
-//        for(InterclassPainter devicePainter : diagramElements){
-//
-//            RectangleElement rectanglePainter = new RectangleElement(
-//                    new Point(devicePainter.getDevice().getPosition().x, devicePainter.getDevice().getPosition().y),
-//                    new Dimension(devicePainter.getDevice().getDimension().width, devicePainter.getDevice().getDimension().height),
-//                    devicePainter.getDevice().getStrokeWidth(),
-//                    devicePainter.getDevice().getPaint(),
-//                    devicePainter.getDevice().getBorderPaint(),
-//                    devicePainter.getDevice().getTextPaint()
-//            );
-//
-//            rectanglePainter.setPojamShape(devicePainter.getDevice().getPojamShape());
-//            rectanglePainter.setName(devicePainter.getDevice().getName());
-//            rectanglePainter.setStrokeWidth(devicePainter.getDevice().getStrokeWidth());
-//            model.addDiagramElements(new RectanglePainter(rectanglePainter));
-//        }
-//
-//
-//
-//        for(ConnectionPainter devicePainter : veze){
-//
-//            ConnectionElement connectionElement = new Agregacija(
-//                    new Point(0, 0),
-//                    new Dimension(1,1),
-//                    devicePainter.getDevice().getStrokeWidth(),
-//                    devicePainter.getDevice().getPaint(),
-//                    devicePainter.getDevice().getPaint(),
-//                    devicePainter.getDevice().getPaint(),
-//                    new ConnectionLine(new Point(0,0), Color.BLUE, 0)
-//            );
-//
-//            connectionElement.setStrokeWidth(devicePainter.getDevice().getStrokeWidth());
-//            int index1 = diagramElements.indexOf((devicePainter.getDevice()).getDevice1());
-//            int index2 = diagramElements.indexOf((devicePainter.getDevice()).getDevice2());
-//            connectionElement.setDevice1(model.getDiagramElements().get(index1));
-//            connectionElement.setDevice2(model.getDiagramElements().get(index2));
-//            connectionElement.setSelected(devicePainter.getDevice().isSelected());
-//            model.importVeza(new AgregacijaPainter(connectionElement));
-//        }
-//        for(int i = 0; i<selectedElements.size(); i++){
-//            int index = diagramElements.indexOf(selectedElements.get(i));
-//            if(index == -1)continue;
-//            model.addSelectedElements(model.getDiagramElements().get(index));
-//        }
-//        for(ISubscriber sub : subscribers){
-//            model.addSubscriber(sub);
-//        }
-//
-//        model.setZoom(zoom);
-//        model.setTransformX(transformX);
-//        model.setTransformY(transformY);
-//
-//        return model;
-//    }
+    public DiagramModel getClone(){
+
+        DiagramModel model = new DiagramModel();
+        ConnectionElement connectionElement = null;
+
+        for(InterclassPainter devicePainter : diagramElements){
+
+            Interclass interclassPainter = new Interclass(
+                    new Point(devicePainter.getDevice().getPosition().x, devicePainter.getDevice().getPosition().y),
+                    new Dimension(devicePainter.getDevice().getDimension().width, devicePainter.getDevice().getDimension().height),
+                    "ime", MainFrame.getInstance().getProjectView().getDiagram(),
+                    devicePainter.getDevice().getStrokeWidth(),
+                    devicePainter.getDevice().getPaint(),
+                    devicePainter.getDevice().getBorderPaint(),
+                    devicePainter.getDevice().getTextPaint()
+            ) {
+            };
+
+            interclassPainter.setPojamShape(devicePainter.getDevice().getPojamShape());
+            interclassPainter.setName(devicePainter.getDevice().getName());
+            interclassPainter.setStrokeWidth(devicePainter.getDevice().getStrokeWidth());
+            model.addDiagramElements(new InterclassPainter(interclassPainter));
+        }
+
+
+        for(ConnectionPainter devicePainter : veze){
+
+            if(devicePainter instanceof AgregacijaPainter){
+                connectionElement = new Agregacija(
+                        new Point(0, 0),
+                        new Dimension(1, 1), "ime", MainFrame.getInstance().getProjectView().getDiagram(),
+                        devicePainter.getDevice().getStrokeWidth(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        new ConnectionLine(new Point(0, 0), Color.BLUE, 0)
+                ) {
+                };
+            }
+            if(devicePainter instanceof KompozicijaPainter){
+                connectionElement = new Kompozicija(
+                        new Point(0, 0),
+                        new Dimension(1, 1), "ime", MainFrame.getInstance().getProjectView().getDiagram(),
+                        devicePainter.getDevice().getStrokeWidth(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        new ConnectionLine(new Point(0, 0), Color.BLUE, 0)
+                ) {
+                };
+            }
+            if(devicePainter instanceof GeneralizacijaPainter){
+                connectionElement = new Generalizacija(
+                        new Point(0, 0),
+                        new Dimension(1, 1), "ime", MainFrame.getInstance().getProjectView().getDiagram(),
+                        devicePainter.getDevice().getStrokeWidth(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        new ConnectionLine(new Point(0, 0), Color.BLUE, 0)
+                ) {
+                };
+            }
+            if(devicePainter instanceof ZavisnostPainter){
+                connectionElement = new Zavisnost(
+                        new Point(0, 0),
+                        new Dimension(1, 1), "ime", MainFrame.getInstance().getProjectView().getDiagram(),
+                        devicePainter.getDevice().getStrokeWidth(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        devicePainter.getDevice().getPaint(),
+                        new ConnectionLine(new Point(0, 0), Color.BLUE, 0)
+                ) {
+                };
+            }
+            connectionElement.setStrokeWidth(devicePainter.getDevice().getStrokeWidth());
+            int index1 = diagramElements.indexOf((devicePainter.getDevice()).getDevice1());
+            int index2 = diagramElements.indexOf((devicePainter.getDevice()).getDevice2());
+            connectionElement.setDevice1(model.getDiagramElements().get(index1));
+            connectionElement.setDevice2(model.getDiagramElements().get(index2));
+            connectionElement.setSelected(devicePainter.getDevice().isSelected());
+            if(connectionElement instanceof Agregacija){
+                model.importVeza(new AgregacijaPainter(connectionElement));
+            }
+            if(connectionElement instanceof Kompozicija){
+                model.importVeza(new KompozicijaPainter(connectionElement));
+            }
+            if(connectionElement instanceof Generalizacija){
+                model.importVeza(new GeneralizacijaPainter(connectionElement));
+            }
+            if(connectionElement instanceof Zavisnost){
+                model.importVeza(new ZavisnostPainter(connectionElement));
+            }
+        }
+        for(int i = 0; i<selectedElements.size(); i++){
+            int index = diagramElements.indexOf(selectedElements.get(i));
+            if(index == -1)continue;
+            model.addSelectedElements(model.getDiagramElements().get(index));
+        }
+        for(ISubscriber sub : subscribers){
+            model.addSubscriber(sub);
+        }
+
+        model.setZoom(zoom);
+        model.setTransformX(transformX);
+        model.setTransformY(transformY);
+
+        return model;
+    }
 
 }

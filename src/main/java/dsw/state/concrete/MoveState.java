@@ -1,6 +1,10 @@
 package dsw.state.concrete;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.GuiCommand;
+import dsw.core.ApplicationFramework;
 import dsw.core.Config;
+import dsw.model.DiagramModel;
 import dsw.model.elements.Interclass;
 import dsw.repository.implementation.Diagram;
 import dsw.state.AbstractState;
@@ -17,9 +21,11 @@ public class MoveState extends AbstractState implements State {
 
     int selectedElement = -1;
     Point startPoint = new Point();
+    DiagramModel oldModel;
     @Override
     public void mouseClicked(MouseEvent e, Diagram diagram) {
         startPoint = diagramPoint(e.getPoint(), diagram.getModel());
+        oldModel = diagram.getModel().getClone();
     }
 
     @Override
@@ -127,6 +133,8 @@ public class MoveState extends AbstractState implements State {
     public void mouseReleased(MouseEvent e, Diagram diagram) {
         diagram.getModel().setAlignmentLineX(new Point(-1, -1), true);
         diagram.getModel().setAlignmentLineY(new Point(-1, -1), true);
+        AbstractCommand command = new GuiCommand(oldModel, diagram.getModel().getClone(), diagram);
+        ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
 
     }
 

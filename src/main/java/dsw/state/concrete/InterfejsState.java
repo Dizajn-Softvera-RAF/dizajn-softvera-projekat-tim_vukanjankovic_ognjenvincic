@@ -1,13 +1,13 @@
 package dsw.state.concrete;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.GuiCommand;
 import dsw.core.ApplicationFramework;
 import dsw.core.Config;
 import dsw.core.logger.MessageType;
 import dsw.model.DiagramModel;
-import dsw.model.elements.ConnectionElement;
 import dsw.model.elements.Interclass;
 import dsw.model.elements.Interfejs;
-import dsw.model.elements.RectangleElement;
 import dsw.model.helpers.ClickedValue;
 import dsw.model.helpers.Tree;
 import dsw.repository.implementation.Diagram;
@@ -34,6 +34,7 @@ public class InterfejsState extends AbstractState implements State {
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
         String name = "<<Interface>> \n Class " + diagram.getModel().getElementCount();
+        DiagramModel oldModel = diagram.getModel().getClone();
         Interfejs interfejs = null;
         int x, y;
 
@@ -67,6 +68,8 @@ public class InterfejsState extends AbstractState implements State {
 
         interfejs.setName(name);
         diagram.getModel().addDiagramElements(new InterclassPainter(interfejs));
+        AbstractCommand command = new GuiCommand(oldModel, diagram.getModel().getClone(), diagram);
+        ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
 
     }
 
@@ -92,9 +95,9 @@ public class InterfejsState extends AbstractState implements State {
         ClickedValue clicked = getClickedIndex(diagramPoint(e.getPoint(), diagram.getModel()), diagram);
         if (clicked == null) return;
         if (clicked.getType() != 0) return;
-        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.MAIN);
+        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.ELLIPSE);
 
-        bfsOrder(diagram.getModel(),  (RectanglePainter) clicked.getD());
+        bfsOrder(diagram.getModel(),  (InterclassPainter) clicked.getD());
 
         diagram.getModel().notifySubscribers(null);
     }
@@ -154,15 +157,15 @@ public class InterfejsState extends AbstractState implements State {
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
-        RectanglePainter p = (RectanglePainter) tree.getRoot();
-        RectangleElement e = (RectangleElement) p.getDevice();
+        InterclassPainter p = (InterclassPainter) tree.getRoot();
+        Interclass e = (Interclass) p.getDevice();
         e.setPosition(new Point(view.getSize().width / 2, view.getSize().height / 2));
 
         for (Object t : tree.children) {
             Tree child = (Tree) t;
-            ((RectanglePainter)child.getRoot()).getDevice().setPosition(getAvailableSpot(p, model));
+            ((InterclassPainter)child.getRoot()).getDevice().setPosition(getAvailableSpot(p, model));
 
-            RectanglePainter c = (RectanglePainter) child.getRoot();
+            InterclassPainter c = (InterclassPainter) child.getRoot();
             draw(c, child, model);
 
 

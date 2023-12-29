@@ -27,6 +27,16 @@ public class ActionManager {
     private SelectionAction selectionAction;
     private MoveAction moveAction;
     private DeletePainterAction deletePainterAction;
+    private UndoAction undoAction;
+    private RedoAction redoAction;
+    private SaveTemplateAction saveTemplateAction;
+    private SaveAsAction saveAsAction;
+    private SaveAction saveAction;
+    private TemplateGalleryAction templateGalleryAction;
+    private ImportAction importAction;
+    private ExportImageAction exportImageAction;
+    private AtributAction atributAction;
+    private MetodaAction metodaAction;
 
     public ActionManager(){initialiseActions();}
 
@@ -51,6 +61,16 @@ public class ActionManager {
         selectionAction = new SelectionAction();
         moveAction = new MoveAction();
         deletePainterAction = new DeletePainterAction();
+        undoAction = new UndoAction();
+        redoAction = new RedoAction();
+        saveAction = new SaveAction();
+        saveAsAction = new SaveAsAction();
+        saveTemplateAction = new SaveTemplateAction();
+        templateGalleryAction = new TemplateGalleryAction();
+        importAction = new ImportAction();
+        exportImageAction = new ExportImageAction();
+        atributAction = new AtributAction();
+        metodaAction = new MetodaAction();
     }
 
 }

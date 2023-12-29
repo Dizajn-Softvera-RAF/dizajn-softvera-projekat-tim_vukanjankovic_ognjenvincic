@@ -1,5 +1,7 @@
 package dsw.controller.tree;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.DiagramCommand;
 import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.controller.tree.view.ClassyTreeView;
 import dsw.core.ApplicationFramework;
@@ -16,10 +18,15 @@ import dsw.repository.implementation.Package;
 import dsw.repository.implementation.Project;
 import dsw.repository.implementation.ProjectExplorer;
 import dsw.view.MainFrame;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 
+
+@Getter
+@Setter
 public class ClassyTreeImpl implements ClassyTree, ISubscriber {
 
     private ClassyTreeView treeView;
@@ -39,7 +46,7 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
     }
 
     @Override
-    public void addChild(ClassyTreeItem parent) {
+    public ClassyNode addChild(ClassyTreeItem parent, String name) {
         ClassyNode node = null;
 
         if (parent.getClassyNode() instanceof ProjectExplorer) {
@@ -51,7 +58,7 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
             ProjectExplorer pe = (ProjectExplorer) parent.getClassyNode().getParent();
             if(!pe.getChildren().contains(parent.getClassyNode())) {
                 ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
-                return;
+                return node;
             }
 
             node = nodeGenerator.generateNode(NodeType.Diagram, parent);
@@ -72,8 +79,13 @@ public class ClassyTreeImpl implements ClassyTree, ISubscriber {
             }
             node = nodeGenerator.generateNode(NodeType.Diagram, parent);
         }
+        if(node != null){
+            AbstractCommand command = new DiagramCommand(parent, node.getClassyTreeItem());
+            ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
+        }
 
 
+        return node;
     }
 
     @Override

@@ -8,51 +8,59 @@ import java.awt.geom.GeneralPath;
 
 public class ZavisnostPainter extends ConnectionPainter {
 
+    private float[] dashPattern = {5.0f, 5.0f}; // Pattern za isprekidanu liniju
+    private ConnectionElement device;
+
     public ZavisnostPainter(ConnectionElement device) {
         super(device);
+        this.device = device;
         updateShape();
     }
 
     @Override
     public void updateShape() {
-        shape=new GeneralPath();
-        ((GeneralPath)shape).moveTo(((ConnectionElement)device).getPosition().x, ((ConnectionElement)device).getPosition().y);
-        ((GeneralPath)shape).lineTo(((ConnectionElement)device).getSize().width, ((ConnectionElement)device).getSize().height);
+        Point p1 = getCenter(getPoint1()); // Centar početnog elementa
+        Point p2 = getCenter(getPoint2()); // Centar krajnjeg elementa
 
-//        super.updateShape(); // Let the superclass handle the basic shape setup
-//
-//        // Calculate positions for the dependency arrow or shape
-//        Point p1 = getPoint1();
-//        Point p2 = getPoint2();
-//
-//        if (p1 != null && p2 != null) {
-//            // Update the shape to include the dependency dashed line
-//            if (shape == null) {
-//                shape = new GeneralPath(); // Initialize the shape if it's null
-//            } else {
-//                ((GeneralPath) shape).reset(); // Reset the shape if it's already defined
-//            }
-//
-//            // Create the dashed line manually using individual segments
-//            float[] dashPattern = {4}; // Adjust this array to change the dash pattern
-//            boolean isOn = true;
-//            float[] segment = new float[2];
-//            segment[0] = p1.x;
-//            segment[1] = p1.y;
-//
-//            while (segment[0] <= p2.x && segment[1] <= p2.y) {
-//                if (isOn) {
-//                    ((GeneralPath) shape).moveTo(segment[0], segment[1]);
-//                    isOn = false;
-//                } else {
-//                    ((GeneralPath) shape).lineTo(segment[0], segment[1]);
-//                    isOn = true;
-//                }
-//                segment[0] += dashPattern[0];
-//                segment[1] += dashPattern[0];
-//            }
-//        }
+        if (p1 != null && p2 != null) {
+            shape = new GeneralPath();
+
+            // Crtanje isprekidane linije zavisnosti
+            ((GeneralPath) shape).moveTo(p1.x, p1.y);
+            ((GeneralPath) shape).lineTo(p2.x, p2.y);
+
+            // Dodavanje strelice na kraju linije
+            drawArrow((GeneralPath) shape, p1, p2);
+
+        }
     }
+
+    private void drawArrow(GeneralPath path, Point p1, Point p2) {
+        // Izračunavanje parametara za strelicu
+        int arrowLength = 15;
+        int arrowWidth = 10;
+
+        double angle = Math.atan2(p2.y - p1.y, p2.x - p1.x); // Ugao linije
+
+        int x3 = p2.x - (int) (arrowLength * Math.cos(angle));
+        int y3 = p2.y - (int) (arrowLength * Math.sin(angle));
+        int x4 = x3 - (int) (arrowWidth * Math.cos(angle - Math.PI / 6));
+        int y4 = y3 - (int) (arrowWidth * Math.sin(angle - Math.PI / 6));
+        int x5 = x3 - (int) (arrowWidth * Math.cos(angle + Math.PI / 6));
+        int y5 = y3 - (int) (arrowWidth * Math.sin(angle + Math.PI / 6));
+
+        // Crtanje strelice kao poligona
+        path.moveTo(p2.x, p2.y);
+        path.lineTo(x4, y4);
+        path.moveTo(p2.x, p2.y);
+        path.lineTo(x5, y5);
+    }
+
+    private Point getCenter(Point p) {
+        // Implementacija za dobijanje centra elementa
+        return p; // Ovo je primer, prilagodite prema vašoj implementaciji
+    }
+
 
     @Override
     public boolean elementAt(Point pos) {
@@ -60,4 +68,3 @@ public class ZavisnostPainter extends ConnectionPainter {
     }
 
 }
-

@@ -11,7 +11,6 @@ import dsw.state.AbstractState;
 import dsw.state.State;
 import dsw.view.painters.ConnectionPainter;
 import dsw.view.painters.InterclassPainter;
-import dsw.view.painters.RectanglePainter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

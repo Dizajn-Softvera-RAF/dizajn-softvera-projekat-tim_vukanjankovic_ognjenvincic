@@ -3,15 +3,26 @@ package dsw.core;
 import dsw.model.DiagramModel;
 import dsw.model.helpers.PointCustom;
 import dsw.view.DiagramView;
+import dsw.view.MainFrame;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class Utils {
+
+    public static boolean IMPORTING = false;
+
     public static ImageIcon loadIcon(String fileName, int width, int height){
 
         URL imageURL = Utils.class.getResource(fileName);
@@ -168,7 +179,32 @@ public class Utils {
         return points;
     }
 
+    public static String getBase64Image() {
+        DiagramView mv = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
+        if (mv == null) return null;
+        BufferedImage image = new BufferedImage(mv.getWidth(), mv.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        mv.printAll(g);
+        g.dispose();
 
+        return imgToBase64String(image, "png");
+    }
+
+    public static String imgToBase64String(final RenderedImage img, final String formatName)
+    {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        try
+        {
+            ImageIO.write(img, formatName, os);
+            return Base64.getEncoder().encodeToString(os.toByteArray());
+        }
+        catch (final IOException ioe)
+        {
+            throw new UncheckedIOException(ioe);
+        }
+    }
 
 
 }

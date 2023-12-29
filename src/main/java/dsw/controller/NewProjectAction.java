@@ -30,7 +30,7 @@ public class NewProjectAction extends AbstractClassyAction implements PopupActio
     @Override
     public void popupAction(Object component) {
         ClassyTreeItem selected = (ClassyTreeItem) component;
-        MainFrame.getInstance().getClassyTree().addChild(selected);
+        MainFrame.getInstance().getClassyTree().addChild(selected, "ime");
     }
 
     @Override
@@ -73,6 +73,6 @@ public class NewProjectAction extends AbstractClassyAction implements PopupActio
             ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.CANT_ADD);
             return;
         }
-        MainFrame.getInstance().getClassyTree().addChild(selected);
+        MainFrame.getInstance().getClassyTree().addChild(selected, "ime");
     }
 }

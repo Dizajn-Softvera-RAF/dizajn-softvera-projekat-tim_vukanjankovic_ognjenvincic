@@ -1,5 +1,7 @@
 package dsw.state.concrete;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.GuiCommand;
 import dsw.core.ApplicationFramework;
 import dsw.core.Config;
 import dsw.core.logger.MessageType;
@@ -37,6 +39,7 @@ public class KlasaState extends AbstractState implements State {
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
         String name = "Class " + diagram.getModel().getElementCount();
+        DiagramModel oldModel = diagram.getModel().getClone();
         Klasa rectangle = null;
         int x, y;
 
@@ -62,14 +65,16 @@ public class KlasaState extends AbstractState implements State {
 
         if (Config.SHAPE == Shapes.MAIN) {
             rectangle=new Klasa(new Point(view.getSize().width / 2, view.getSize().height / 2), new Dimension(74,60),
-                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black);
+                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black, new ArrayList<>(), new ArrayList<>());
         } else {
             rectangle=new Klasa(new Point(x, y), new Dimension(74,50),
-                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black);
+                    "Klasa", MainFrame.getInstance().getProjectView().getDiagram(),2f, new Color(121, 207, 246), Color.black, Color.black, new ArrayList<>(), new ArrayList<>());
         }
 
         rectangle.setName(name);
         diagram.getModel().addDiagramElements(new InterclassPainter(rectangle));
+        AbstractCommand command = new GuiCommand(oldModel, diagram.getModel().getClone(), diagram);
+        ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
 
     }
 
@@ -105,9 +110,9 @@ public class KlasaState extends AbstractState implements State {
                 return;
             }
         }
-        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.MAIN);
+        ((Interclass) clicked.getD().getDevice()).setPojamShape(Shapes.ELLIPSE);
 
-        bfsOrder(diagram.getModel(), (RectanglePainter) clicked.getD());
+        bfsOrder(diagram.getModel(), (InterclassPainter) clicked.getD());
 
         diagram.getModel().notifySubscribers(null);
     }
@@ -123,11 +128,11 @@ public class KlasaState extends AbstractState implements State {
         }
         return list;
     }
-    private void draw(RectanglePainter parent, Tree tree, DiagramModel model) {
+    private void draw(InterclassPainter parent, Tree tree, DiagramModel model) {
         for (Object t : tree.children) {
             Tree child = (Tree) t;
 
-            RectanglePainter painter = (RectanglePainter)child.getRoot();
+            InterclassPainter painter = (InterclassPainter) child.getRoot();
 
             painter.getDevice().setPosition(getAvailableSpot(parent, model));
 
@@ -148,7 +153,7 @@ public class KlasaState extends AbstractState implements State {
         return visited.size();
     }
 
-    private void bfsOrder(DiagramModel model, RectanglePainter root) {
+    private void bfsOrder(DiagramModel model, InterclassPainter root) {
 
         Tree tree = new Tree(model, root, null);
         System.out.println(getNumberOfConnections(root, model));
@@ -167,15 +172,15 @@ public class KlasaState extends AbstractState implements State {
 
         DiagramView view = (DiagramView) MainFrame.getInstance().getProjectView().getTabbedPane().getSelectedComponent();
 
-        RectanglePainter p = (RectanglePainter) tree.getRoot();
-        RectangleElement e = (RectangleElement) p.getDevice();
+        InterclassPainter p = (InterclassPainter) tree.getRoot();
+        Interclass e = (Interclass) p.getDevice();
         e.setPosition(new Point(view.getSize().width / 2, view.getSize().height / 2));
 
         for (Object t : tree.children) {
             Tree child = (Tree) t;
-            ((RectanglePainter)child.getRoot()).getDevice().setPosition(getAvailableSpot(p, model));
+            ((InterclassPainter)child.getRoot()).getDevice().setPosition(getAvailableSpot(p, model));
 
-            RectanglePainter c = (RectanglePainter) child.getRoot();
+            InterclassPainter c = (InterclassPainter) child.getRoot();
             draw(c, child, model);
 
 

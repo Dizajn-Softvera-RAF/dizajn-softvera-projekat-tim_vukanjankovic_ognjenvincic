@@ -6,6 +6,7 @@ import dsw.state.State;
 import dsw.state.concrete.*;
 import dsw.view.DiagramView;
 import dsw.view.MainFrame;
+import sun.applet.Main;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +16,7 @@ import java.awt.event.MouseEvent;
 
 public class Palette extends JToolBar {
 
-    private JButton klasaButton, interfejsButton, enumButton, agregacijaButton, kompozicijaButton, zavisnostButton, generalizacijaButton, zoomInButton, zoomOutButton, selectionButton, moveButton, deleteButton;
+    private JButton klasaButton, interfejsButton, enumButton, agregacijaButton, kompozicijaButton, zavisnostButton, generalizacijaButton, zoomInButton, zoomOutButton, selectionButton, moveButton, deleteButton, undoButton, redoButton, atributButton, metodaButton;
     private JPanel row1, row2, wrapper;
     public Palette() {
         super(VERTICAL);
@@ -46,6 +47,11 @@ public class Palette extends JToolBar {
         selectionButton = new JButton(MainFrame.getInstance().getActionManager().getSelectionAction());
         moveButton = new JButton(MainFrame.getInstance().getActionManager().getMoveAction());
         deleteButton = new JButton(MainFrame.getInstance().getActionManager().getDeletePainterAction());
+        undoButton = new JButton(MainFrame.getInstance().getActionManager().getUndoAction());
+        redoButton = new JButton(MainFrame.getInstance().getActionManager().getRedoAction());
+        metodaButton = new JButton(MainFrame.getInstance().getActionManager().getMetodaAction());
+        atributButton = new JButton(MainFrame.getInstance().getActionManager().getAtributAction());
+
 
         addElement(enumButton);
         addElement(klasaButton);
@@ -59,6 +65,10 @@ public class Palette extends JToolBar {
         addElement(selectionButton);
         addElement(moveButton);
         addElement(deleteButton);
+        addElement(undoButton);
+        addElement(redoButton);
+        addElement(metodaButton);
+        addElement(atributButton);
 
         wrapper.add(row1);
         wrapper.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -123,6 +133,14 @@ public class Palette extends JToolBar {
         }
     }
 
+    public void setUndoEnabled(boolean enabled) {
+        if (undoButton == null) return;
+        undoButton.setEnabled(enabled);
+    }
+    public void setRedoEnabled(boolean enabled) {
+        if (redoButton == null) return;
+        redoButton.setEnabled(enabled);
+    }
     private void reset(){
         Border raisedBorder = Config.palleteDeselectedBorder;
         klasaButton.setBorder(raisedBorder);
@@ -137,6 +155,11 @@ public class Palette extends JToolBar {
         selectionButton.setBorder(raisedBorder);
         moveButton.setBorder(raisedBorder);
         deleteButton.setBorder(raisedBorder);
+        undoButton.setBorder(raisedBorder);
+        redoButton.setBorder(raisedBorder);
+        metodaButton.setBorder(raisedBorder);
+        atributButton.setBorder(raisedBorder);
+
     }
 }
 

@@ -2,6 +2,7 @@ package dsw.controller.tree;
 
 import dsw.controller.tree.model.ClassyTreeItem;
 import dsw.controller.tree.view.ClassyTreeView;
+import dsw.repository.composite.ClassyNode;
 import dsw.repository.composite.NodeGenerator;
 import dsw.repository.implementation.NodeType;
 import dsw.repository.implementation.ProjectExplorer;
@@ -9,7 +10,7 @@ import dsw.repository.implementation.ProjectExplorer;
 public interface ClassyTree {
 
     ClassyTreeView generateTree(ProjectExplorer projectExplorer, NodeGenerator nodeGenerator);
-    void addChild(ClassyTreeItem parent);
+    ClassyNode addChild(ClassyTreeItem parent, String name);
     void addChild(ClassyTreeItem parent, NodeType child);
     ClassyTreeItem getSelectedNode();
     void removeChild(ClassyTreeItem parent);

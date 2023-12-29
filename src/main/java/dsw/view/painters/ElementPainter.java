@@ -11,7 +11,7 @@ public abstract class ElementPainter {
         this.device = element;
     }
 
-    public abstract void paint(Graphics2D g, DiagramElement element);
+    public abstract void paint(Graphics2D g, DiagramElement element, boolean shouldFill);
 
     public abstract boolean elementAt(Point pos);
 

@@ -1,8 +1,11 @@
 package dsw.controller;
 
+import dsw.commands.AbstractCommand;
+import dsw.commands.implementation.GuiCommand;
 import dsw.core.ApplicationFramework;
 import dsw.core.Utils;
 import dsw.core.logger.MessageType;
+import dsw.model.DiagramModel;
 import dsw.model.elements.ConnectionElement;
 import dsw.repository.implementation.Diagram;
 import dsw.view.DiagramView;
@@ -28,6 +31,8 @@ public class DeletePainterAction extends AbstractClassyAction{
             ApplicationFramework.getInstance().getMessageGenerator().generateMessage(MessageType.NODE_NOT_SELECTED);
             return;
         }
+        DiagramModel oldModel = dv.getDiagram().getModel().getClone();
+
 
         for(int i =0; i<dv.getDiagram().getModel().getElementCount();i++){
             if(dv.getDiagram().getModel().getSelectedElements().contains(dv.getDiagram().getModel().getDiagramElements().get(i))){
@@ -41,7 +46,8 @@ public class DeletePainterAction extends AbstractClassyAction{
                 i--;
             }
         }
-
+        AbstractCommand command = new GuiCommand(oldModel, dv.getDiagram().getModel().getClone(), dv.getDiagram());
+        ApplicationFramework.getInstance().getGui().getCommandManager().addCommand(command);
         dv.getDiagram().getModel().notifySubscribers(null);
     }
 }

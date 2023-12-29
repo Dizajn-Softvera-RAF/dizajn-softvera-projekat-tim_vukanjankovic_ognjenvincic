@@ -13,6 +13,8 @@ public class Config {
     public static String LOG_FILE_PATH = "log.txt";
     public static Shapes SHAPE = Shapes.ELLIPSE;
     public static boolean SNAPPING = true;
+    public static String TEMPLATE_FOLDER = "templates/";
+
 
     public static Border palleteSelectedBorder = BorderFactory.createLoweredBevelBorder();
     public static Border palleteDeselectedBorder = BorderFactory.createRaisedBevelBorder();
