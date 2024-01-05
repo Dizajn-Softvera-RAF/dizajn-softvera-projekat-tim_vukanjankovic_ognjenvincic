@@ -131,17 +131,17 @@ public class Serializer {
                 ce.setStrokeWidth(Float.parseFloat(veza.get("stroke_width").toString()));
                 ce.setDevice1(m.getModel().getDiagramElements().get(Integer.parseInt(veza.get("start").toString())));
                 ce.setDevice2(m.getModel().getDiagramElements().get(Integer.parseInt(veza.get("end").toString())));
+                String ce2 = (String) veza.get("tip_veze");
 
-//                if(ce instanceof Agregacija){
-//                    m.getModel().importVeza(new AgregacijaPainter(ce));
-//                }if(ce instanceof Generalizacija){
-//                    m.getModel().importVeza(new GeneralizacijaPainter(ce));
-//                }if(ce instanceof Zavisnost){
-//                    m.getModel().importVeza(new ZavisnostPainter(ce));
-//                }if(ce instanceof Kompozicija){
-//                    m.getModel().importVeza(new KompozicijaPainter(ce));
-//                }
-                 m.getModel().importVeza(new GeneralizacijaPainter(ce));
+                if(ce2.equals("agregacija")){
+                    m.getModel().importVeza(new AgregacijaPainter(ce));
+                }if(ce2.equals("generalizacija")){
+                    m.getModel().importVeza(new GeneralizacijaPainter(ce));
+                }if(ce2.equals("zavisnost")){
+                    m.getModel().importVeza(new ZavisnostPainter(ce));
+                }if(ce2.equals("kompozicija")){
+                    m.getModel().importVeza(new KompozicijaPainter(ce));
+                }
 
             }
 
@@ -192,6 +192,16 @@ public class Serializer {
                     v.put("end", getIndex(model.getDiagramElements(), modelVeze.getDevice2()));
                     v.put("stroke_color", colorStringify(modelVeze.getBorderPaint()));
                     v.put("stroke_width", modelVeze.getStrokeWidth());
+
+                    if(modelVeze instanceof Agregacija){
+                        v.put("tip_veze", "agregacija");
+                    }if(modelVeze instanceof Generalizacija){
+                        v.put("tip_veze", "generalizacija");
+                    }if(modelVeze instanceof Zavisnost){
+                        v.put("tip_veze", "zavisnost");
+                    }if(modelVeze instanceof Kompozicija){
+                        v.put("tip_veze", "kompozicija");
+                    }
                     veze.add(v);
                 }
 
